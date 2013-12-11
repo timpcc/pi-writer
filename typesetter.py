@@ -16,7 +16,7 @@ class TypesetterThread(threading.Thread):
         self.workDir = '/home/pi/pi-writer/current/'
         self.typesetDir = '/home/pi/pi-writer/typeset/'
         self._stop = threading.Event()
-        loadSettings
+        self.loadSettings()
         
     def loadSettings(self):
         #configPath = os.path.join(os.environ.get("XDG_CONFIG_HOME"), "pi-writer", "typesetter.conf")
