@@ -30,8 +30,8 @@ class TypesetterThread(threading.Thread):
         print(data)
         print("Len: " + str(len(arr)))
         for item in arr:
-            print(item.match)
-            print(item.replace)
+            print(item["match"])
+            print(item["replace"])
             print("----")
 
     def run(self):
