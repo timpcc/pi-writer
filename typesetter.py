@@ -28,7 +28,7 @@ class TypesetterThread(threading.Thread):
         arr = json.loads(data)
         
         print(data)
-        print("Len: " + len(arr))
+        print("Len: " + str(len(arr)))
         for item in arr:
             print(item.match)
             print(item.replace)
