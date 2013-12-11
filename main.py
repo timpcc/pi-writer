@@ -14,10 +14,6 @@ if __name__ == "__main__":
     #thread1 = myThread(1, "Thread-1", 1)
     #thread2 = myThread(2, "Thread-2", 2)
     
-    print("$XDG_DATA_HOME " + str(os.environ.get("$XDG_DATA_HOME")))
-    print("XDG_DATA_HOME " + str(os.environ.get("XDG_DATA_HOME")))
-    
-    print("$XDG_CONFIG_HOME " + str(os.environ.get("$XDG_CONFIG_HOME")))
     print("XDG_CONFIG_HOME " + str(os.environ.get("XDG_CONFIG_HOME")))
 
     networkCheckerThread = NetworkThread(2)
