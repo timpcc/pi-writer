@@ -8,6 +8,7 @@ Created on 11 Dec 2013
 import threading
 import os
 import ConfigParser
+import json
 
 class TypesetterThread(threading.Thread):
     
@@ -24,7 +25,14 @@ class TypesetterThread(threading.Thread):
         config = ConfigParser.ConfigParser()
         config.read(configPath)
         data = config.get("Replacements", "patterns")
+        arr = json.loads(data)
+        
         print(data)
+        print("Len: " + len(arr))
+        for item in arr:
+            print(item.match)
+            print(item.replace)
+            print("----")
 
     def run(self):
         self.filename = self.createNewWorkingFile()
