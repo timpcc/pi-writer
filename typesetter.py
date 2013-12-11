@@ -9,13 +9,14 @@ import threading
 import os
 import ConfigParser
 import json
+import re
 
 class TypesetterThread(threading.Thread):
     
     def __init__(self, path):
         super(TypesetterThread, self).__init__()
-        self.workDir = '/home/pi/pi-writer/current/'
-        self.typesetDir = '/home/pi/pi-writer/typeset/'
+        self.publishDir = '/home/pi/pi-writer/publish/'
+        self.path = path
         self._stop = threading.Event()
         self.loadSettings()
         
@@ -25,37 +26,31 @@ class TypesetterThread(threading.Thread):
         config = ConfigParser.ConfigParser()
         config.read(configPath)
         data = config.get("Replacements", "patterns")
-        arr = json.loads(data)
-        
-        print(data)
-        print("Len: " + str(len(arr)))
-        for item in arr:
-            print(item["match"])
-            print(item["replace"])
-            print("----")
+        self.replaceList = json.loads(data)
 
     def run(self):
-        self.filename = self.createNewWorkingFile()
-        
-        print("Writing to new file" + os.path.join(self.workDir, self.filename))
-        self.hookManager.start()
-        while not self._stop.isSet():
-            time.sleep(0.1)
-        print("Logger thread stopped")
-        self.hookManager.cancel()
+        # load the file
+        data = ""
+        with open(self.path, 'r') as content_file:
+            data = content_file.read()
+        text = data
+        for item in self.replaceList:
+            text = re.sub(item["match"], item["replace"], text)
+        print(text)
 
     def stop(self):
         print("Attempting to stop typesetter thread...")
         self._stop.set()
 
-    def sendEmail(self, content):
-        fromaddr = 'tim.crilly@gmail.com'
-        toaddrs  = 'tim.crilly@boardworks.co.uk'
-        msg = content
-        username = 'tim.crilly@gmail.com'
-        password = 'C0ffeecup'
-        server = smtplib.SMTP('smtp.gmail.com:587')
-        server.starttls()
-        server.login(username,password)
-        server.sendmail(fromaddr, toaddrs, msg)
-        server.quit()
+
+if __name__ == "__main__":
+    typesettingDir = '/home/pi/pi-writer/typesetter/'
+    files = []
+    for (dirpath, dirnames, filenames) in os.walk(typesettingDir):
+        files.extend(filenames)
+        break
+    for file in files:
+        typesetterThread = TypesetterThread(file)
+        typesetterThread.start()
+        typesetterThread.join()
+        
