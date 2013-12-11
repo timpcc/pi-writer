@@ -47,10 +47,10 @@ if __name__ == "__main__":
     typesettingDir = '/home/pi/pi-writer/typeset/'
     files = []
     for (dirpath, dirnames, filenames) in os.walk(typesettingDir):
-        files.extend(os.path.join(dirpath,filenames))
+        files.extend(filenames))
         break
     for file in files:
-        typesetterThread = TypesetterThread(file)
+        typesetterThread = TypesetterThread(os.path.join(typesettingDir, file))
         typesetterThread.start()
         typesetterThread.join()
         
