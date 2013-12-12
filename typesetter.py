@@ -10,6 +10,7 @@ import os
 import ConfigParser
 import json
 import re
+from PyRTF import *
 
 class TypesetterThread(threading.Thread):
     
@@ -41,6 +42,12 @@ class TypesetterThread(threading.Thread):
     def stop(self):
         print("Attempting to stop typesetter thread...")
         self._stop.set()
+        
+    def createRTF(self):
+        doc = Document()
+        ss = doc.StyleSheet
+        section = Section()
+        
 
 
 if __name__ == "__main__":
