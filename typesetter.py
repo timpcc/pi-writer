@@ -66,7 +66,7 @@ class TypesetterThread(threading.Thread):
         paras = text.split(']')
         
         for pt in paras:
-            p = Paragraph()
+            p = Paragraph(ss.ParagraphStyles.Normal)
             p.append(pt)
             section.append(p)
         return doc
