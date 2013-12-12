@@ -39,14 +39,17 @@ class TypesetterThread(threading.Thread):
         text = data
         for item in self.replaceList:
             text = re.sub(item["match"], item["replace"], text)
-        print(text)
-        (dir, filename) = os.path.split(self.path)
+        #print(text)
+        
+        doc = self.createRTF(text)
+        renderer = Renderer()
+        
+        (directory, filename) = os.path.split(self.path)
         
         if not os.path.exists(self.publishDir):
             os.makedirs(self.publishDir)
             
-        with open(os.path.join(self.publishDir, filename), 'w') as content_file:
-            content_file.write(text)
+        renderer.Write(doc, open(os.path.join(self.publishDir, filename, '.rtf'), 'w'))
             
         mailer = Mailer()
         mailer.send("Tests", "See Attackmented Text File", [os.path.join(self.publishDir, filename)])
@@ -55,11 +58,18 @@ class TypesetterThread(threading.Thread):
         print("Attempting to stop typesetter thread...")
         self._stop.set()
         
-    def createRTF(self):
+    def createRTFDocument(self, text):
         doc = Document()
         ss = doc.StyleSheet
         section = Section()
         
+        paras = text.split(']')
+        
+        for pt in paras:
+            p = Paragraph()
+            p.append(pt)
+            section.append(p)
+        return doc
 
 
 if __name__ == "__main__":
