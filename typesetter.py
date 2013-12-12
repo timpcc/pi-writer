@@ -62,7 +62,7 @@ class TypesetterThread(threading.Thread):
         doc = Document()
         ss = doc.StyleSheet
         section = Section()
-        
+        doc.Sections.append(section)
         paras = text.split(']')
         
         for pt in paras:
