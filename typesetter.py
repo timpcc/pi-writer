@@ -49,7 +49,7 @@ class TypesetterThread(threading.Thread):
         if not os.path.exists(self.publishDir):
             os.makedirs(self.publishDir)
             
-        renderer.Write(doc, open(os.path.join(self.publishDir, filename, '.rtf'), 'w'))
+        renderer.Write(doc, open(os.path.join(self.publishDir, filename + '.rtf'), 'w'))
             
         mailer = Mailer()
         mailer.send("Tests", "See Attackmented Text File", [os.path.join(self.publishDir, filename)])
