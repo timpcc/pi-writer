@@ -28,6 +28,7 @@ class TypesetterThread(threading.Thread):
         config = ConfigParser.ConfigParser()
         config.read(configPath)
         data = config.get("Replacements", "patterns")
+        print(data)
         self.replaceList = json.loads(data)
 
     def run(self):
