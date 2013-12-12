@@ -10,4 +10,5 @@ if __name__ == "__main__":
     testLoggerThread = TestLoggerThread()
     # Start new Network checker thread
     testLoggerThread.start("/home/pi/pi-writer/Tests/testinput1.txt")
+    testLoggerThread.join()
     print("Exiting main thread")
