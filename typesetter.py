@@ -41,7 +41,7 @@ class TypesetterThread(threading.Thread):
             text = re.sub(item["match"], item["replace"], text)
         #print(text)
         
-        doc = self.createRTF(text)
+        doc = self.createRTFDocument(text)
         renderer = Renderer()
         
         (directory, filename) = os.path.split(self.path)
