@@ -67,7 +67,7 @@ class TypesetterThread(threading.Thread):
         
         for pt in paras:
             p = Paragraph(ss.ParagraphStyles.Normal)
-            p.append(pt)
+            p.append(str(pt))
             section.append(p)
         return doc
 
