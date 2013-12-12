@@ -11,6 +11,7 @@ import ConfigParser
 import json
 import re
 from PyRTF import *
+from mailer import Mailer
 
 class TypesetterThread(threading.Thread):
     
@@ -38,6 +39,16 @@ class TypesetterThread(threading.Thread):
         for item in self.replaceList:
             text = re.sub(item["match"], item["replace"], text)
         print(text)
+        (dir, filename) = os.path.split(self.path)
+        
+        if not os.path.exists(self.publishDir):
+            os.makedirs(self.publishDir)
+            
+        with open(os.path.join(self.publishDir, filename), 'w') as content_file:
+            content_file.write(text)
+            
+        mailer = Mailer()
+        mailer.send("Tests", "See Attackmented Text File", [os.path.join(self.publishDir, filename)])
 
     def stop(self):
         print("Attempting to stop typesetter thread...")
