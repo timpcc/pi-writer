@@ -15,6 +15,7 @@ from email import Encoders
 import datetime
 import shutil
 from logger import LoggerThread
+from mailer import Mailer
 
 class TestLoggerThread(LoggerThread):
     
@@ -91,7 +92,9 @@ class TestLoggerThread(LoggerThread):
         shutil.move(os.path.join(self.workDir, self.filename), os.path.join(self.typesetDir, self.filename))
         print("Moved file to" + os.path.join(self.typesetDir, self.filename))
         print("File saved")
-        self.sendEmail([os.path.join(self.typesetDir, self.filename)])
+        #self.sendEmail([os.path.join(self.typesetDir, self.filename)])
+        mailer = Mailer()
+        mailer.send("Tests", "See Attackment", [os.path.join(self.typesetDir, self.filename)])
         print("File emailed")
 
     def createNewWorkingFile(self):
