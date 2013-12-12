@@ -17,7 +17,7 @@ import ConfigParser
 
 class Mailer():
     
-    def __init__(self, path):
+    def __init__(self):
         # load the username and password
         configPath = os.path.join(os.environ.get("XDG_CONFIG_HOME"), "pi-writer", "email.conf")
         self.config = ConfigParser.ConfigParser()
