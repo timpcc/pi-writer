@@ -41,7 +41,10 @@ class TestLoggerThread(LoggerThread):
         for char in text:
             if char.isupper():
                 self.writeKey("Shift_L")
-            self.writeKey(char)
+            if char == "\n":
+                self.writeKey("Return")
+            else:
+                self.writeKey(char)
         
         self.save()        
         
