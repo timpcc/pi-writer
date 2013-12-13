@@ -65,14 +65,14 @@ class TypesetterThread(threading.Thread):
         doc.Sections.append(section)
         paras = text.split(']')
         
-        index = 1
-        for par in paras:
-            if par == "":
-                print("Skip emailing empty paragraph")
-                continue     
-            mailer = Mailer()
-            mailer.send("Paragraph " + str(index), par)
-            index += 1
+#        index = 1
+#        for par in paras:
+#            if par == "":
+#                print("Skip emailing empty paragraph")
+#                continue     
+#            mailer = Mailer()
+#            mailer.send("Paragraph " + str(index), par)
+#            index += 1
         
         first = True
         for pt in paras:
