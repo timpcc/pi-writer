@@ -67,6 +67,9 @@ class TypesetterThread(threading.Thread):
         
         index = 1
         for par in paras:
+            if par == "":
+                print("Skip emailing empty paragraph")
+                continue     
             mailer = Mailer()
             mailer.send("Paragraph " + str(index), par)
             index += 1
