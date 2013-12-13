@@ -27,7 +27,7 @@ class LoggerThread(threading.Thread):
         self.hookManager = pyxhook.HookManager()
         self.hookManager.HookKeyboard()
         self.hookManager.KeyDown = self.onKeyDownEvent
-        self.hookManager.KeyUp = self.onKeyUpEvent
+#        self.hookManager.KeyUp = self.onKeyUpEvent
         self._stop = threading.Event()
         self.pageIndex = 1
         self.startDateTime = datetime.datetime.now().strftime(self.fileDateFormat)
@@ -58,8 +58,8 @@ class LoggerThread(threading.Thread):
         #self.filename = self.createNewWorkingFile()
         #print("Writing to new file" + os.path.join(self.workDir, self.filename))
 
-    def onKeyUpEvent(self, event):
-        pass
+#    def onKeyUpEvent(self, event):
+#        pass
 
     def onKeyDownEvent(self, event):
         print(event.Key)
