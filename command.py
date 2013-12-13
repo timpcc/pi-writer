@@ -6,6 +6,7 @@ Created on 13 Dec 2013
 import re
 import ConfigParser
 import os
+import json
 
 class CommandRunner():
     
@@ -14,12 +15,15 @@ class CommandRunner():
         self.config = ConfigParser.ConfigParser()
         self.config.read(configPath)
         #self.workDir = self.config.get("Commands", "workDir")
-        
+        data = self.config.get("CommandParser", "patterns")
+        self.replaceList = json.loads(data)
 
     def run(self, data):
         try:
+            text = self.parseCommandString(data)
+            print("Parsed command: " + text)
             # get id - get first line
-            m_id = re.match(r"(?P<id>[A-Za-z\t .]+)", data)
+            m_id = re.match(r"(?P<id>[A-Za-z\t .]+)", text)
             if m_id is not None:
                 id = m_id.group("id")
                 
@@ -30,7 +34,7 @@ class CommandRunner():
                 command = self.config.get("Commands", id);
                 
                 if command is not None:
-                    m = re.match(command["pattern"], data)
+                    m = re.match(command["pattern"], text)
                     cmd = command["command"]
                     print("Command: " + cmd)
                     for g in command["groups"]:
@@ -43,5 +47,9 @@ class CommandRunner():
                 
         except Exception:
             return False
-             
+           
+    def parseCommandString(self, text):
+        for item in self.replaceList:
+            text = re.sub(item["match"], item["replace"], text)
+        return text
             
