@@ -14,7 +14,7 @@ class LoggerThread(threading.Thread):
     
     def __init__(self):
         super(LoggerThread, self).__init__()
-        configPath = os.path.join(os.environ.get("XDG_CONFIG_HOME"), "pi-writer", "logger.conf")
+        configPath = os.path.join(os.environ.get("XDG_CONFIG_HOME"), "pi-writer", "pi-writer.conf")
         self.config = ConfigParser.ConfigParser()
         self.config.read(configPath)
         self.workDir = self.config.get("Logger", "workDir")
