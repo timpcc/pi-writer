@@ -65,9 +65,20 @@ class TypesetterThread(threading.Thread):
         doc.Sections.append(section)
         paras = text.split(']')
         
+        index = 1
+        for par in paras:
+            mailer = Mailer()
+            mailer.send("Paragraph " + str(index), par)
+            index += 1
+        
+        first = True
         for pt in paras:
-            p = Paragraph(ss.ParagraphStyles.Normal)
-            p.append(str(pt) + "\n")
+            if first:
+                p = Paragraph(ss.ParagraphStyles.Normal)
+                first = False
+            else:
+                p = Paragraph()
+            p.append(str(pt))
             section.append(p)
         return doc
 
