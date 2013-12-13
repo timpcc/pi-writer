@@ -5,6 +5,7 @@ Created on 13 Dec 2013
 '''
 import re
 import ConfigParser
+import os
 
 class CommandRunner():
     
