@@ -81,11 +81,14 @@ class TypesetterThread(threading.Thread):
                 print("Skipping empty paragraph")
                 continue            
             cls = pt.__class__
-            text = pt
+
             print("Paragraph type: " + str(cls))
-            if isinstance(pt, unicode):
-                unicodedata.normalize("NFKD", text).encode('ascii', 'ignore')
-            
+            if str(type(pt)) == "<type 'unicode'>":
+                print("Normalizing unicode")
+                text = unicodedata.normalize("NFKD", pt).encode('ascii', 'ignore')
+            else:
+                print("Text already ASCII")
+                text = pt
             if first:
                 p = Paragraph(ss.ParagraphStyles.Normal)
                 first = False
