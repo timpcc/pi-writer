@@ -59,6 +59,7 @@ class LoggerThread(threading.Thread):
         #print("Writing to new file" + os.path.join(self.workDir, self.filename))
 
     def onKeyUpEvent(self, event):
+        pass
 
     def onKeyDownEvent(self, event):
         print(event.Key)
@@ -91,7 +92,7 @@ class LoggerThread(threading.Thread):
     def executeCommandString(self):
         runner = CommandRunner()
         print("Running command: " + self.commandString)
-        runner.run(data)
+        runner.run(self.commandString)
         print("Command run")
             
     def save(self):
