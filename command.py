@@ -4,6 +4,7 @@ Created on 13 Dec 2013
 @author: tim.crilly
 '''
 import re
+import ConfigParser
 
 class CommandRunner():
     

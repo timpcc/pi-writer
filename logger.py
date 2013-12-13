@@ -7,6 +7,7 @@ import time
 import datetime
 import shutil
 import pyxhook
+import ConfigParser
 from command import CommandRunner
 
 class LoggerThread(threading.Thread):
