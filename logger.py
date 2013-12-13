@@ -62,7 +62,7 @@ class LoggerThread(threading.Thread):
 #        pass
 
     def onKeyDownEvent(self, event):
-        print(event.Key)
+        #print(event.Key)
         
         if event.Key == self.commandKey:
             if self.commandMode:
@@ -80,7 +80,10 @@ class LoggerThread(threading.Thread):
 #            return
         
         #print(str(event.Ascii) + " )Key press: " + event.Key)
-        self.writeKey(event.Key)
+        if self.commandMode:
+            writeKeyToCommand(event.Key)
+        else:
+            self.writeKey(event.Key)
             
     def writeKey(self, key):
         with open(os.path.join(self.workDir, self.filename), 'a') as content_file:
