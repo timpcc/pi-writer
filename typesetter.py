@@ -79,13 +79,14 @@ class TypesetterThread(threading.Thread):
             if pt == "":
                 print("Skipping empty paragraph")
                 continue            
-            
+            cls = pt.__class__
+            print("Paragraph type: " + str(cls))
             if first:
                 p = Paragraph(ss.ParagraphStyles.Normal)
                 first = False
             else:
                 p = Paragraph()
-            p.append(pt)
+            p.append(TEXT( pt, font=ss.Fonts.VTPortableRemington ))
             section.append(p)
         return doc
 
