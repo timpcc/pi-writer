@@ -50,7 +50,7 @@ class NetworkThread(threading.Thread):
                 response = requests.get('http://google.com')
                 if response.status_code == requests.codes.ok:
                     #GPIO.output(24, GPIO.LOW) # turn the LED off
-                    print("success")
+                    #print("success")
                     # record this result
                     self._lastResult = True
                 else:
