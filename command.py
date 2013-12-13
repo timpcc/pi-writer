@@ -33,7 +33,7 @@ class CommandRunner():
                 # get the config for this id
                 command = self.config.get("Commands", id);
                 print("Command is " + command)
-                command_obj = json.load(command)
+                command_obj = json.loads(command)
                 if command_obj is not None:
                     m = re.match(command["pattern"], text)
                     cmd = command_obj["command"]
