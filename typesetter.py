@@ -52,7 +52,7 @@ class TypesetterThread(threading.Thread):
         
         rtf_file_name = os.path.join(self.publishDir, filename + '.rtf')
             
-        renderer.Write(doc, open(rtd_file_name, 'w'))
+        renderer.Write(doc, open(rtf_file_name, 'w'))
             
         mailer = Mailer()
         mailer.send("Tests", "See Attackmented Text File", [rtf_file_name])
