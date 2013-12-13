@@ -6,7 +6,6 @@ Created on 12 Dec 2013
 import os
 import smtplib
 from email.MIMEMultipart import MIMEMultipart
-from email.mime.application import MIMEApplication
 from email.MIMEBase import MIMEBase
 from email.MIMEText import MIMEText
 from email.Utils import COMMASPACE, formatdate
@@ -51,10 +50,9 @@ class Mailer():
         msg.attach( MIMEText(message) )
         
         for f in files:
-            #part = MIMEBase('application', "octet-stream")
-            part = MIMEApplication(open(f, "rb").read())
-            #part.set_payload( open(f,"rb").read() )
-            #Encoders.encode_base64(part)
+            part = MIMEBase('application', "octet-stream")
+            part.set_payload( open(f,"rb").read() )
+            Encoders.encode_base64(part)
             part.add_header('Content-Disposition', 'attachment; filename="%s"' % os.path.basename(f))
             msg.attach(part) 
         #'smtp.gmail.com:587'

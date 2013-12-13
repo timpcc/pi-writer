@@ -49,11 +49,13 @@ class TypesetterThread(threading.Thread):
         
         if not os.path.exists(self.publishDir):
             os.makedirs(self.publishDir)
+        
+        rtf_file_name = os.path.join(self.publishDir, filename + '.rtf')
             
-        renderer.Write(doc, open(os.path.join(self.publishDir, filename + '.rtf'), 'w'))
+        renderer.Write(doc, open(rtd_file_name, 'w'))
             
         mailer = Mailer()
-        mailer.send("Tests", "See Attackmented Text File", [os.path.join(self.publishDir, filename)])
+        mailer.send("Tests", "See Attackmented Text File", [rtf_file_name])
 
     def stop(self):
         print("Attempting to stop typesetter thread...")
@@ -66,14 +68,14 @@ class TypesetterThread(threading.Thread):
         doc.Sections.append(section)
         paras = text.split(']')
         
-        index = 1
-        for par in paras:
-            if par == "":
-                print("Skip emailing empty paragraph")
-                continue     
-            mailer = Mailer()
-            mailer.send("Paragraph " + str(index), par)
-            index += 1
+#        index = 1
+#        for par in paras:
+#            if par == "":
+#                print("Skip emailing empty paragraph")
+#                continue     
+#            mailer = Mailer()
+#            mailer.send("Paragraph " + str(index), par)
+#            index += 1
         
         first = True
         for pt in paras:
