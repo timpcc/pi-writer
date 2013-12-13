@@ -7,22 +7,31 @@ import time
 import datetime
 import shutil
 import pyxhook
+from command import CommandRunner
 
 class LoggerThread(threading.Thread):
     
     def __init__(self):
         super(LoggerThread, self).__init__()
-        self.workDir = '/home/pi/pi-writer/current/'
-        self.typesetDir = '/home/pi/pi-writer/typeset/'
+        configPath = os.path.join(os.environ.get("XDG_CONFIG_HOME"), "pi-writer", "logger.conf")
+        self.config = ConfigParser.ConfigParser()
+        self.config.read(configPath)
+        self.workDir = self.config.get("Logger", "workDir")
+        self.workDir = self.config.get("Logger", "commandDir")
+        self.typesetDir = self.config.get("Logger", "typesetDir")
+        self.commandKey = self.config.get("Logger", "commandKey")
+        self.fileDateFormat = self.config.get("Logger", "fileDateFormat")
+        #self.workDir = '/home/pi/pi-writer/current/'
+        #self.typesetDir = '/home/pi/pi-writer/typeset/'
         self.hookManager = pyxhook.HookManager()
         self.hookManager.HookKeyboard()
         self.hookManager.KeyDown = self.onKeyDownEvent
         self.hookManager.KeyUp = self.onKeyUpEvent
         self._stop = threading.Event()
         self.pageIndex = 1
-        self.startDateTime = datetime.datetime.now().strftime("%Y%m%d_%H.%M.%S")
-        self._control_l_down = False
-        
+        self.startDateTime = datetime.datetime.now().strftime(self.fileDateFormat)
+        self.commandMode = False
+        self.commandString = ""
 
     def run(self):
         self.filename = self.createNewWorkingFile()
@@ -54,8 +63,17 @@ class LoggerThread(threading.Thread):
 
     def onKeyDownEvent(self, event):
         print(event.Key)
-        if event.Key == "Control_L":
-            self._control_l_down = True
+        
+        if event.Key == self.commandKey:
+            if self.commandMode:
+                # run the command
+                self.commandMode = False
+                self.executeCommandString()
+            else:
+                self.commandMode = True
+                self.commandString = ""
+            return
+            
         if self._control_l_down and (event.Key == "p" or event.Key == "P"):
             print("MAKE NEW PAGE")
             self.newPage()
@@ -67,6 +85,15 @@ class LoggerThread(threading.Thread):
     def writeKey(self, key):
         with open(os.path.join(self.workDir, self.filename), 'a') as content_file:
             content_file.write(key + '\n')
+            
+    def writeKeyToCommand(self, Key):
+        self.commandString += Key
+        
+    def executeCommandString(self):
+        runner = CommandRunner()
+        print("Running command: " + self.commandString)
+        runner.run(data)
+        print("Command run")
             
     def save(self):
         print("Saving...")
