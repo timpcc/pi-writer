@@ -59,8 +59,6 @@ class LoggerThread(threading.Thread):
         #print("Writing to new file" + os.path.join(self.workDir, self.filename))
 
     def onKeyUpEvent(self, event):
-        if event.Key == "Control_L" and self._control_l_down:
-            self._control_l_down = False
 
     def onKeyDownEvent(self, event):
         print(event.Key)
@@ -75,10 +73,10 @@ class LoggerThread(threading.Thread):
                 self.commandString = ""
             return
             
-        if self._control_l_down and (event.Key == "p" or event.Key == "P"):
-            print("MAKE NEW PAGE")
-            self.newPage()
-            return
+#        if self._control_l_down and (event.Key == "p" or event.Key == "P"):
+#            print("MAKE NEW PAGE")
+#            self.newPage()
+#            return
         
         #print(str(event.Ascii) + " )Key press: " + event.Key)
         self.writeKey(event.Key)

