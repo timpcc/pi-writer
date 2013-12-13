@@ -32,12 +32,12 @@ class CommandRunner():
             if id is not None:
                 # get the config for this id
                 command = self.config.get("Commands", id);
-                
-                if command is not None:
+                command_obj = json.load(command)
+                if command_obj is not None:
                     m = re.match(command["pattern"], text)
-                    cmd = command["command"]
+                    cmd = command_obj["command"]
                     print("Command: " + cmd)
-                    for g in command["groups"]:
+                    for g in command_obj["groups"]:
                         cmd = cmd.replace("%"+g+"%", m.group(g))
                         print(cmd)
                     return True
@@ -45,7 +45,8 @@ class CommandRunner():
                 print("Cannot find id in command")
                 return False
                 
-        except Exception:
+        except Exception as e:
+            print("Exception: " + str(e))
             return False
            
     def parseCommandString(self, text):
