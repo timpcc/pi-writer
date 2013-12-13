@@ -10,6 +10,7 @@ import os
 import ConfigParser
 import json
 import re
+import unicodedata
 from PyRTF import *
 from mailer import Mailer
 
@@ -80,13 +81,17 @@ class TypesetterThread(threading.Thread):
                 print("Skipping empty paragraph")
                 continue            
             cls = pt.__class__
+            text = pt
             print("Paragraph type: " + str(cls))
+            if isinstance(pt, unicode):
+                unicodedata.normalize("NFKD", text).encode('ascii', 'ignore')
+            
             if first:
                 p = Paragraph(ss.ParagraphStyles.Normal)
                 first = False
             else:
                 p = Paragraph()
-            p.append(TEXT( pt, font=ss.Fonts.VTPortableRemington ))
+            p.append(TEXT( text, font=ss.Fonts.VTPortableRemington ))
             section.append(p)
         return doc
 
