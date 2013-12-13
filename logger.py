@@ -81,7 +81,7 @@ class LoggerThread(threading.Thread):
         
         #print(str(event.Ascii) + " )Key press: " + event.Key)
         if self.commandMode:
-            writeKeyToCommand(event.Key)
+            self.writeKeyToCommand(event.Key)
         else:
             self.writeKey(event.Key)
             
