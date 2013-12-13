@@ -45,9 +45,9 @@ class Mailer():
         msg['From'] = send_from
         msg['To'] = COMMASPACE.join(send_to)
         msg['Date'] = formatdate(localtime=True)
-        msg['Subject'] = 'test'
+        msg['Subject'] = subject
         
-        msg.attach( MIMEText("See attachment") )
+        msg.attach( MIMEText(message) )
         
         for f in files:
             part = MIMEBase('application', "octet-stream")
