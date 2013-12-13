@@ -32,6 +32,7 @@ class CommandRunner():
             if id is not None:
                 # get the config for this id
                 command = self.config.get("Commands", id);
+                print("Command is " + command)
                 command_obj = json.load(command)
                 if command_obj is not None:
                     m = re.match(command["pattern"], text)
@@ -47,7 +48,8 @@ class CommandRunner():
                 
         except Exception as e:
             print("Exception: " + str(e))
-            return False
+            raise e
+            #return False
            
     def parseCommandString(self, text):
         for item in self.replaceList:
