@@ -14,8 +14,6 @@ if __name__ == "__main__":
     # Create new threads
     #thread1 = myThread(1, "Thread-1", 1)
     #thread2 = myThread(2, "Thread-2", 2)
-    
-    print("XDG_CONFIG_HOME " + str(os.environ.get("XDG_CONFIG_HOME")))
 
     #networkCheckerThread = NetworkThread(2)
     loggerThread = LoggerThread()

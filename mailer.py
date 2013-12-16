@@ -19,7 +19,7 @@ class Mailer():
     
     def __init__(self):
         # load the username and password
-        configPath = os.path.join(os.environ.get("XDG_CONFIG_HOME"), "pi-writer", "email.conf")
+        configPath = os.path.join("/home/pi", "pi-writer", "email.conf")
         self.config = ConfigParser.ConfigParser()
         self.config.read(configPath)
         self.server = self.config.get("Email", "server")

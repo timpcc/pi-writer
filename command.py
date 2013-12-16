@@ -11,7 +11,7 @@ import json
 class CommandRunner():
     
     def __init__(self):
-        configPath = os.path.join(os.environ.get("XDG_CONFIG_HOME"), "pi-writer", "pi-writer.conf")
+        configPath = os.path.join("/home/pi", "pi-writer", "pi-writer.conf")
         self.config = ConfigParser.ConfigParser()
         self.config.read(configPath)
         #self.workDir = self.config.get("Commands", "workDir")
