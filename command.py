@@ -28,14 +28,13 @@ class CommandRunner():
             id = m_id.group("id")
             
         print("Using ID: " + id)
-        
+                
         if id is not None:
             # get the config for this id
             command = self.config.get("Commands", id);
-            print("Command is " + command)
             command_obj = json.loads(command)
             if command_obj is not None:
-                m = re.match(command["pattern"], text)
+                m = re.match(command_obj["pattern"], text)
                 cmd = command_obj["command"]
                 print("Command: " + cmd)
                 for g in command_obj["groups"]:
