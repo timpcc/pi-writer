@@ -35,14 +35,19 @@ class CommandRunner():
             command_obj = json.loads(command)
             if command_obj is not None:
                 m = re.match(command_obj["pattern"], text)
+                
                 cmd = command_obj["command"]
                 print("Command: " + cmd)
-                for g in command_obj["groups"]:
-                    cmd = cmd.replace("%"+g+"%", m.group(g))
-                    print(cmd)
-                status = os.system(cmd)
+                if (m.group is not None):
+                    for g in command_obj["groups"]:
+                        cmd = cmd.replace("%"+g+"%", m.group(g))
+                print(cmd)
+                status = os.system(cmd)        
                 print("ExitCode: " + str(status))
-                return True
+                if status == 0:
+                    return True
+                else: 
+                    return False
         else:
             print("Cannot find id in command")
             return False
