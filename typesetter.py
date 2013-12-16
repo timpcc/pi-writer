@@ -11,6 +11,7 @@ import ConfigParser
 import json
 import re
 import unicodedata
+import shutil
 from PyRTF import *
 from mailer import Mailer
 from textmangler import TextMangler
@@ -20,6 +21,7 @@ class TypesetterThread(threading.Thread):
     def __init__(self, path):
         super(TypesetterThread, self).__init__()
         self.publishDir = '/home/pi/pi-writer/publish/'
+        self.sentDir = '/home/pi/pi-writer/sent/'
         self.path = path
         self._stop = threading.Event()
         self.loadSettings()
@@ -56,7 +58,11 @@ class TypesetterThread(threading.Thread):
         renderer.Write(doc, open(rtf_file_name, 'w'))
             
         mailer = Mailer()
-        mailer.send("Tests", "See Attackmented Text File", [rtf_file_name])
+        if (mailer.send("Tests", "See Attackmented Text File", [rtf_file_name])):
+            # move the file to the sent directory
+            if not os.path.exists(self.sentDir):
+                os.makedirs(self.sentDir)
+            shutil.move(rtf_file_name, os.path.join(self.sentDir, filename + ".rtf"))
 
     def stop(self):
         print("Attempting to stop typesetter thread...")
@@ -67,17 +73,8 @@ class TypesetterThread(threading.Thread):
         ss = doc.StyleSheet
         section = Section()
         doc.Sections.append(section)
-        paras = text.split(']')
-        
-#        index = 1
-#        for par in paras:
-#            if par == "":
-#                print("Skip emailing empty paragraph")
-#                continue     
-#            mailer = Mailer()
-#            mailer.send("Paragraph " + str(index), par)
-#            index += 1
-        
+        paras = text.split('\n')
+               
         first = True
         for pt in paras:
             if pt == "":
@@ -103,13 +100,14 @@ class TypesetterThread(threading.Thread):
 
 
 if __name__ == "__main__":
+    inputDir = '/home/pi/pi-writer/current/'
     typesettingDir = '/home/pi/pi-writer/typeset/'
     files = []
-    for (dirpath, dirnames, filenames) in os.walk(typesettingDir):
+    for (dirpath, dirnames, filenames) in os.walk(inputDir):
         files.extend(filenames)
         break
     for file in files:
-        typesetterThread = TypesetterThread(os.path.join(typesettingDir, file))
+        typesetterThread = TypesetterThread(os.path.join(inputDir, file))
         typesetterThread.start()
         typesetterThread.join()
         

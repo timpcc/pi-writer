@@ -29,35 +29,39 @@ class Mailer():
         self.recipients = self.config.get("Email", "recipients").split(";")
     
     def send(self, subject, message, files = []):
-
-        COMMASPACE = ', '
-        
-        send_from = self.sender
-        send_to = self.recipients
-        username = self.user
-        password = self.password
-        
-        print("Connecting to: " + self.server)
-        print("With username: [" + self.user+"]")
-        print("And password:  [" + self.password+"]")
-        
-        msg = MIMEMultipart()
-        msg['From'] = send_from
-        msg['To'] = COMMASPACE.join(send_to)
-        msg['Date'] = formatdate(localtime=True)
-        msg['Subject'] = subject
-        
-        msg.attach( MIMEText(message) )
-        
-        for f in files:
-            part = MIMEBase('application', "octet-stream")
-            part.set_payload( open(f,"rb").read() )
-            Encoders.encode_base64(part)
-            part.add_header('Content-Disposition', 'attachment; filename="%s"' % os.path.basename(f))
-            msg.attach(part) 
-        #'smtp.gmail.com:587'
-        smtp = smtplib.SMTP(self.server)
-        smtp.starttls()
-        smtp.login(username,password)
-        smtp.sendmail(send_from, send_to, msg.as_string())
-        smtp.close()
+        try:
+            COMMASPACE = ', '
+            
+            send_from = self.sender
+            send_to = self.recipients
+            username = self.user
+            password = self.password
+            
+            print("Connecting to: " + self.server)
+            print("With username: [" + self.user+"]")
+            print("And password:  [" + self.password+"]")
+            
+            msg = MIMEMultipart()
+            msg['From'] = send_from
+            msg['To'] = COMMASPACE.join(send_to)
+            msg['Date'] = formatdate(localtime=True)
+            msg['Subject'] = subject
+            
+            msg.attach( MIMEText(message) )
+            
+            for f in files:
+                part = MIMEBase('application', "octet-stream")
+                part.set_payload( open(f,"rb").read() )
+                Encoders.encode_base64(part)
+                part.add_header('Content-Disposition', 'attachment; filename="%s"' % os.path.basename(f))
+                msg.attach(part) 
+            #'smtp.gmail.com:587'
+            smtp = smtplib.SMTP(self.server)
+            smtp.starttls()
+            smtp.login(username,password)
+            smtp.sendmail(send_from, send_to, msg.as_string())
+            smtp.close()
+            return True
+        except Exception as e:
+            print(str(e))
+            return False
