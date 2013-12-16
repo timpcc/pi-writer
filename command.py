@@ -23,7 +23,7 @@ class CommandRunner():
         text = self.parseCommandString(data)
         print("Parsed command: " + text)
         # get id - get first line
-        m_id = re.match(r"(?P<id>[A-Za-z\t .]+)", text)
+        m_id = re.match(r"(?P<id>[A-Za-z\t ._]+)", text)
         if m_id is not None:
             id = m_id.group("id")
             
