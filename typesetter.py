@@ -13,6 +13,7 @@ import re
 import unicodedata
 from PyRTF import *
 from mailer import Mailer
+from textmanger import TextMangler
 
 class TypesetterThread(threading.Thread):
     
@@ -25,7 +26,7 @@ class TypesetterThread(threading.Thread):
         
     def loadSettings(self):
         #configPath = os.path.join(os.environ.get("XDG_CONFIG_HOME"), "pi-writer", "typesetter.conf")
-        configPath = os.path.join("/home/pi/pi-writer", "typesetter.conf")
+        configPath = os.path.join("/home/pi/pi-writer", "pi-writer.conf")
         config = ConfigParser.ConfigParser()
         config.read(configPath)
         data = config.get("Replacements", "patterns")
@@ -38,8 +39,8 @@ class TypesetterThread(threading.Thread):
         with open(self.path, 'r') as content_file:
             data = content_file.read()
         text = data
-        for item in self.replaceList:
-            text = re.sub(item["match"], item["replace"], text)
+        mangler = TextMangler(self.replaceList)
+        text = mangler.mangle(text)
         #print(text)
         
         doc = self.createRTFDocument(text)

@@ -18,7 +18,7 @@ class LoggerThread(threading.Thread):
         self.config = ConfigParser.ConfigParser()
         self.config.read(configPath)
         self.workDir = self.config.get("Logger", "workDir")
-        self.workDir = self.config.get("Logger", "commandDir")
+        #self.commandDir = self.config.get("Logger", "commandDir")
         self.typesetDir = self.config.get("Logger", "typesetDir")
         self.commandKey = self.config.get("Logger", "commandKey")
         self.fileDateFormat = self.config.get("Logger", "fileDateFormat")
