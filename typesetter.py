@@ -13,7 +13,7 @@ import re
 import unicodedata
 from PyRTF import *
 from mailer import Mailer
-from textmanger import TextMangler
+from textmangler import TextMangler
 
 class TypesetterThread(threading.Thread):
     
