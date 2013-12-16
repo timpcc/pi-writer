@@ -3,7 +3,7 @@
 import time
 import sys
 import os
-from network import NetworkThread
+#from network import NetworkThread
 from logger import LoggerThread
 #from typesetter import TypesetterThread
 import traceback
