@@ -14,5 +14,5 @@ class TextMangler():
         text = input
         for item in self.replaceList:
             while(re.search(item["match"], text, re.M) is not None):
-                text = re.sub(item["match"], item["replace"], text, flags=re.M)
+                text = re.sub(item["match"], item["replace"], text, flags=re.MULTILINE)
         return text

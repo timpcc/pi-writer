@@ -41,7 +41,7 @@ class TypesetterThread(threading.Thread):
         text = data
         mangler = TextMangler(self.replaceList)
         text = mangler.mangle(text)
-        #print(text)
+        print(text)
         
         doc = self.createRTFDocument(text)
         renderer = Renderer()
