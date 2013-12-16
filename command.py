@@ -40,6 +40,8 @@ class CommandRunner():
                 for g in command_obj["groups"]:
                     cmd = cmd.replace("%"+g+"%", m.group(g))
                     print(cmd)
+                    status = os.system(cmd)
+                    print("ExitCode: " + str(status))
                 return True
         else:
             print("Cannot find id in command")
