@@ -17,15 +17,15 @@ if __name__ == "__main__":
     
     print("XDG_CONFIG_HOME " + str(os.environ.get("XDG_CONFIG_HOME")))
 
-    networkCheckerThread = NetworkThread(2)
+    #networkCheckerThread = NetworkThread(2)
     loggerThread = LoggerThread()
 #    typesetterThread = TypesetterThread("")
     # Make the network checker thread daemonic so we don't have to control it
-    networkCheckerThread.daemon = True
+    #networkCheckerThread.daemon = True
     loggerThread.daemon = True
 #    typesetterThread.daemon = True
     # Start new Network checker thread
-    networkCheckerThread.start()
+    #networkCheckerThread.start()
     # start the key loggin thread
     loggerThread.start()
 #    typesetterThread.start()
@@ -34,16 +34,16 @@ if __name__ == "__main__":
         while True:
             time.sleep(0.1)
     except KeyboardInterrupt:
-        networkCheckerThread.stop()
-        networkCheckerThread.join()
+        #networkCheckerThread.stop()
+        #networkCheckerThread.join()
         loggerThread.stop()
         loggerThread.join()
         print("Exiting Main Thread")
         sys.exit(0)
     except Exception as e:
         print("Exception: " + str(e))
-        networkCheckerThread.stop()
-        networkCheckerThread.join()
+        #networkCheckerThread.stop()
+        #networkCheckerThread.join()
         loggerThread.stop()
         loggerThread.join()
         print("Exiting Main Thread")
