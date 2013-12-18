@@ -94,7 +94,7 @@ class LoggerThread(threading.Thread):
             content_file.write(key + '\n')
             
     def writeKeyToCommand(self, Key):
-        self.commandString += Key
+        self.commandString += Key + '\n'
         
     def executeCommandString(self):
         runner = CommandRunner()
