@@ -7,6 +7,7 @@ import time
 import datetime
 import shutil
 import pyxhook
+import json
 import ConfigParser
 from command import CommandRunner
 from textmangler import TextMangler
@@ -34,7 +35,8 @@ class LoggerThread(threading.Thread):
         self.startDateTime = datetime.datetime.now().strftime(self.fileDateFormat)
         self.commandMode = False
         self.commandString = ""
-        self.commandPatterns = self.config.get("CommandParser", "patterns")
+        data = self.config.get("CommandParser", "patterns")
+        self.commandPatterns = self.replaceList = json.loads(data)
 
     def run(self):
         self.filename = self.createNewWorkingFile()
