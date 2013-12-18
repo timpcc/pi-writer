@@ -19,6 +19,15 @@ def my_callback2(channel):
 GPIO.add_event_detect(25, GPIO.FALLING, callback=my_callback, bouncetime=300)
 GPIO.add_event_detect(25, GPIO.RISING, callback=my_callback2, bouncetime=300)
 
+try:
+    print "Waiting for rising edge on port 24"
+    GPIO.wait_for_edge(24, GPIO.RISING)
+    print "Rising edge detected on port 24. Here endeth the third lesson."
+
+except KeyboardInterrupt:
+    GPIO.cleanup()       # clean up GPIO on CTRL+C exit
+GPIO.cleanup()           # clean up GPIO on normal exit
+
 #try:
 #    while True:            # this will carry on until you hit CTRL+C
 #        if GPIO.input(25): # if port 25 == 1
