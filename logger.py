@@ -34,7 +34,7 @@ class LoggerThread(threading.Thread):
         self.startDateTime = datetime.datetime.now().strftime(self.fileDateFormat)
         self.commandMode = False
         self.commandString = ""
-        self.commandPatterns = config.get("CommandParser", "patterns")
+        self.commandPatterns = self.config.get("CommandParser", "patterns")
 
     def run(self):
         self.filename = self.createNewWorkingFile()
