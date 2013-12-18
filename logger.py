@@ -100,7 +100,7 @@ class LoggerThread(threading.Thread):
         runner = CommandRunner()
         mangler = TextMangler(self.commandPatterns)
         print("Mangling command: " + self.commandString)
-        mangledCommand =mangler.mangle(self.commandString) 
+        mangledCommand = mangler.mangle(self.commandString) 
         print("Running command: " + mangledCommand)
         runner.run(mangledCommand)
         print("Command run")
