@@ -9,6 +9,7 @@ import shutil
 import pyxhook
 import ConfigParser
 from command import CommandRunner
+from textmangler import TextMangler
 
 class LoggerThread(threading.Thread):
     
@@ -33,6 +34,7 @@ class LoggerThread(threading.Thread):
         self.startDateTime = datetime.datetime.now().strftime(self.fileDateFormat)
         self.commandMode = False
         self.commandString = ""
+        self.commandPatterns = config.get("CommandParser", "patterns")
 
     def run(self):
         self.filename = self.createNewWorkingFile()
@@ -94,8 +96,11 @@ class LoggerThread(threading.Thread):
         
     def executeCommandString(self):
         runner = CommandRunner()
-        print("Running command: " + self.commandString)
-        runner.run(self.commandString)
+        mangler = TextMangler(self.commandPatterns)
+        print("Mangling command: " + self.commandString)
+        mangledCommand =mangler.mangle(self.commandString) 
+        print("Running command: " + mangledCommand)
+        runner.run(mangledCommand)
         print("Command run")
             
     def save(self):
