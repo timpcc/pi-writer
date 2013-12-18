@@ -35,7 +35,7 @@ class LoggerThread(threading.Thread):
         self.startDateTime = datetime.datetime.now().strftime(self.fileDateFormat)
         self.commandMode = False
         self.commandString = ""
-        data = self.config.get("CommandParser", "patterns")
+        data = self.config.get("Replacements", "patterns")
         self.commandPatterns = self.replaceList = json.loads(data)
 
     def run(self):
