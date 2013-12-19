@@ -23,6 +23,7 @@ class TypesetterThread(threading.Thread):
         super(TypesetterThread, self).__init__()
         self.publishDir = '/home/pi/pi-writer/publish/'
         self.sentDir = '/home/pi/pi-writer/sent/'
+        self.rawSentDir = '/home/pi/pi-writer/raw_sent/'
         self.path = path
         self._stop = threading.Event()
         self.loadSettings()
@@ -64,8 +65,11 @@ class TypesetterThread(threading.Thread):
             if not os.path.exists(self.sentDir):
                 os.makedirs(self.sentDir)
             target = os.path.join(self.sentDir, filename + ".rtf")
+            rawtarget = os.path.join(self.rawSentDir, filename + ".rtf")
             shutil.move(rtf_file_name, target)
+            shutil.move(self.path, rawtarget)
             print("Moved file to send dir: " + target)
+            print("Moved file to raw send dir: " + rawtarget)
 
     def stop(self):
         print("Attempting to stop typesetter thread...")
