@@ -13,18 +13,18 @@ import ConfigParser
 from command import CommandRunner
 from textmangler import TextMangler
 
-class LoggerThread(threading.Thread):
+class KeyLoggerThread(threading.Thread):
     
     def __init__(self):
-        super(LoggerThread, self).__init__()
+        super(KeyLoggerThread, self).__init__()
         configPath = os.path.join("/home/pi", "pi-writer", "pi-writer.conf")
         self.config = ConfigParser.ConfigParser()
         self.config.read(configPath)
-        self.workDir = self.config.get("Logger", "workDir")
+        self.workDir = self.config.get("KeyLogger", "workDir")
         #self.commandDir = self.config.get("Logger", "commandDir")
-        self.typesetDir = self.config.get("Logger", "typesetDir")
-        self.commandKey = self.config.get("Logger", "commandKey")
-        self.fileDateFormat = self.config.get("Logger", "fileDateFormat")
+        self.typesetDir = self.config.get("KeyLogger", "typesetDir")
+        self.commandKey = self.config.get("KeyLogger", "commandKey")
+        self.fileDateFormat = self.config.get("KeyLogger", "fileDateFormat")
         #self.workDir = '/home/pi/pi-writer/current/'
         #self.typesetDir = '/home/pi/pi-writer/typeset/'
         self.hookManager = pyxhook.HookManager()
