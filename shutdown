@@ -1,5 +1,4 @@
 #! /bin/sh
-# /etc/init.d/example
 
 ### BEGIN INIT INFO
 # Provides:          pi-writer-shutdown
