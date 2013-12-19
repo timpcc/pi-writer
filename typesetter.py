@@ -104,6 +104,10 @@ if __name__ == "__main__":
     inputDir = '/home/pi/pi-writer/current/'
     typesettingDir = '/home/pi/pi-writer/typeset/'
     files = []
+    
+    mailer = Mailer()
+    mailer.send("Tests", "See Attackmented Text File Testing...", [])
+    
     for (dirpath, dirnames, filenames) in os.walk(inputDir):
         files.extend(filenames)
         break
