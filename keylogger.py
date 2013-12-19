@@ -1,3 +1,4 @@
+
 #!/usr/bin/python
 
 import threading
@@ -7,21 +8,23 @@ import time
 import datetime
 import shutil
 import pyxhook
+import json
 import ConfigParser
 from command import CommandRunner
+from textmangler import TextMangler
 
-class LoggerThread(threading.Thread):
+class KeyLoggerThread(threading.Thread):
     
     def __init__(self):
-        super(LoggerThread, self).__init__()
+        super(KeyLoggerThread, self).__init__()
         configPath = os.path.join("/home/pi", "pi-writer", "pi-writer.conf")
         self.config = ConfigParser.ConfigParser()
         self.config.read(configPath)
-        self.workDir = self.config.get("Logger", "workDir")
+        self.workDir = self.config.get("KeyLogger", "workDir")
         #self.commandDir = self.config.get("Logger", "commandDir")
-        self.typesetDir = self.config.get("Logger", "typesetDir")
-        self.commandKey = self.config.get("Logger", "commandKey")
-        self.fileDateFormat = self.config.get("Logger", "fileDateFormat")
+        self.typesetDir = self.config.get("KeyLogger", "typesetDir")
+        self.commandKey = self.config.get("KeyLogger", "commandKey")
+        self.fileDateFormat = self.config.get("KeyLogger", "fileDateFormat")
         #self.workDir = '/home/pi/pi-writer/current/'
         #self.typesetDir = '/home/pi/pi-writer/typeset/'
         self.hookManager = pyxhook.HookManager()
@@ -33,6 +36,8 @@ class LoggerThread(threading.Thread):
         self.startDateTime = datetime.datetime.now().strftime(self.fileDateFormat)
         self.commandMode = False
         self.commandString = ""
+        data = self.config.get("Replacements", "patterns")
+        self.commandPatterns = self.replaceList = json.loads(data)
 
     def run(self):
         self.filename = self.createNewWorkingFile()
@@ -90,12 +95,15 @@ class LoggerThread(threading.Thread):
             content_file.write(key + '\n')
             
     def writeKeyToCommand(self, Key):
-        self.commandString += Key
+        self.commandString += Key + '\n'
         
     def executeCommandString(self):
         runner = CommandRunner()
-        print("Running command: " + self.commandString)
-        runner.run(self.commandString)
+        mangler = TextMangler(self.commandPatterns)
+        print("Mangling command: " + self.commandString)
+        mangledCommand = mangler.mangle(self.commandString) 
+        print("Running command: " + mangledCommand)
+        runner.run(mangledCommand)
         print("Command run")
             
     def save(self):
