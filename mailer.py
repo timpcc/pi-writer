@@ -37,10 +37,6 @@ class Mailer():
             username = self.user
             password = self.password
             
-            print("Connecting to: " + self.servers)
-            print("With username: [" + self.user+"]")
-            print("And password:  [" + self.password+"]")
-            
             msg = MIMEMultipart()
             msg['From'] = send_from
             msg['To'] = COMMASPACE.join(send_to)
