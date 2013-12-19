@@ -52,10 +52,15 @@ class Mailer():
             for f in files:
                 print("Adding file " + str(f))
                 part = MIMEBase('application', "octet-stream")
+                print("Created part")
                 part.set_payload( open(f,"rb").read() )
+                print("Set payload")
                 Encoders.encode_base64(part)
+                print("encoded as base64")
                 part.add_header('Content-Disposition', 'attachment; filename="%s"' % os.path.basename(f))
+                print("added header")
                 msg.attach(part) 
+                print("attached")
             #'smtp.gmail.com:587'
             smtp = smtplib.SMTP(self.server)
             smtp.starttls()
