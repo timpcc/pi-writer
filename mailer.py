@@ -50,6 +50,7 @@ class Mailer():
             msg.attach( MIMEText(message) )
             
             for f in files:
+                print("Adding file " + str(f))
                 part = MIMEBase('application', "octet-stream")
                 part.set_payload( open(f,"rb").read() )
                 Encoders.encode_base64(part)
@@ -59,8 +60,10 @@ class Mailer():
             smtp = smtplib.SMTP(self.server)
             smtp.starttls()
             smtp.login(username,password)
+            print("Sending email...")
             smtp.sendmail(send_from, send_to, msg.as_string())
             smtp.close()
+            print("Done.")
             return True
         except Exception as e:
             print(str(e))
