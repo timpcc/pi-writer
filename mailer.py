@@ -37,7 +37,7 @@ class Mailer():
             username = self.user
             password = self.password
             
-            print("Connecting to: " + self.server)
+            print("Connecting to: " + self.servers)
             print("With username: [" + self.user+"]")
             print("And password:  [" + self.password+"]")
             
