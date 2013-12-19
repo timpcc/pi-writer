@@ -4,7 +4,7 @@ import time
 import sys
 import os
 #from network import NetworkThread
-from logger import LoggerThread
+from keylogger import KeyLoggerThread
 #from typesetter import TypesetterThread
 import traceback
 
@@ -16,16 +16,16 @@ if __name__ == "__main__":
     #thread2 = myThread(2, "Thread-2", 2)
 
     #networkCheckerThread = NetworkThread(2)
-    loggerThread = LoggerThread()
+    keyLoggerThread = KeyLoggerThread()
 #    typesetterThread = TypesetterThread("")
     # Make the network checker thread daemonic so we don't have to control it
     #networkCheckerThread.daemon = True
-    loggerThread.daemon = True
+    keyLoggerThread.daemon = True
 #    typesetterThread.daemon = True
     # Start new Network checker thread
     #networkCheckerThread.start()
     # start the key loggin thread
-    loggerThread.start()
+    keyLoggerThread.start()
 #    typesetterThread.start()
     #thread2.start()
     try:
@@ -34,16 +34,16 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         #networkCheckerThread.stop()
         #networkCheckerThread.join()
-        loggerThread.stop()
-        loggerThread.join()
+        keyLoggerThread.stop()
+        keyLoggerThread.join()
         print("Exiting Main Thread")
         sys.exit(0)
     except Exception as e:
         print("Exception: " + str(e))
         #networkCheckerThread.stop()
         #networkCheckerThread.join()
-        loggerThread.stop()
-        loggerThread.join()
+        keyLoggerThread.stop()
+        keyLoggerThread.join()
         print("Exiting Main Thread")
         traceback.print_exc(file=sys.stdout)
         sys.exit(0)
