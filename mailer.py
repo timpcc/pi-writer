@@ -62,11 +62,15 @@ class Mailer():
                 msg.attach(part) 
                 print("attached")
             #'smtp.gmail.com:587'
+            print("Creating smtp connection")
             smtp = smtplib.SMTP(self.server)
+            print("Created")
             smtp.starttls()
+            print("enabled secure connection")
             smtp.login(username,password)
             print("Sending email...")
             smtp.sendmail(send_from, send_to, msg.as_string())
+            print("Sent")
             smtp.close()
             print("Done.")
             return True
