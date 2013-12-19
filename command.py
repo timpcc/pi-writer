@@ -19,43 +19,43 @@ class CommandRunner():
         self.replaceList = json.loads(data)
 
     def run(self, data):
-        #try:
-        text = self.parseCommandString(data)
-        print("Parsed command: " + text)
-        # get id - get first line
-        m_id = re.match(r"(?P<id>[A-Za-z0-9\._]+)", text)
-        if m_id is not None:
-            id = m_id.group("id")
-            
-        print("Using ID: " + id)
+        try:
+            text = self.parseCommandString(data)
+            print("Parsed command: " + text)
+            # get id - get first line
+            m_id = re.match(r"(?P<id>[A-Za-z0-9\._]+)", text)
+            if m_id is not None:
+                id = m_id.group("id")
                 
-        if id is not None:
-            # get the config for this id
-            command = self.config.get("Commands", id);
-            command_obj = json.loads(command)
-            if command_obj is not None:
-                m = re.match(command_obj["pattern"], text)
+            print("Using ID: " + id)
+                    
+            if id is not None:
+                # get the config for this id
+                command = self.config.get("Commands", id);
+                command_obj = json.loads(command)
+                if command_obj is not None:
+                    m = re.match(command_obj["pattern"], text)
+                    
+                    cmd = command_obj["command"]
+                    print("Command: " + cmd)
+                    if (m.group is not None):
+                        for g in command_obj["groups"]:
+                            cmd = cmd.replace("%"+g+"%", m.group(g))
+                    print(cmd)
+                    status = os.system(cmd)        
+                    print("ExitCode: " + str(status))
+                    if status == 0:
+                        return True
+                    else: 
+                        return False
+            else:
+                print("Cannot find id in command")
+                return False
                 
-                cmd = command_obj["command"]
-                print("Command: " + cmd)
-                if (m.group is not None):
-                    for g in command_obj["groups"]:
-                        cmd = cmd.replace("%"+g+"%", m.group(g))
-                print(cmd)
-                status = os.system(cmd)        
-                print("ExitCode: " + str(status))
-                if status == 0:
-                    return True
-                else: 
-                    return False
-        else:
-            print("Cannot find id in command")
+        except Exception as e:
+            print("Exception: " + str(e))
+            #raise e
             return False
-                
-        #except Exception as e:
-        #    print("Exception: " + str(e))
-        #    raise e
-            #return False
            
     def parseCommandString(self, text):
         for item in self.replaceList:

