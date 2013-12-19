@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#! /usr/bin/python
 
 import time
 import sys
@@ -7,8 +7,12 @@ import os
 from keylogger import KeyLoggerThread
 #from typesetter import TypesetterThread
 import traceback
+import logging
 
 exitFlag = 0
+
+logging.basicConfig(filename="pi-writer.log", level=logging.DEBUG)
+logger = logging.getLogger(__name__)
       
 if __name__ == "__main__":
     # Create new threads
@@ -16,16 +20,19 @@ if __name__ == "__main__":
     #thread2 = myThread(2, "Thread-2", 2)
 
     #networkCheckerThread = NetworkThread(2)
+    logger.debug("Creating threads...")
     keyLoggerThread = KeyLoggerThread()
-#    typesetterThread = TypesetterThread("")
+    logger.debug("KeyLogger thread created")
     # Make the network checker thread daemonic so we don't have to control it
     #networkCheckerThread.daemon = True
+    #logger.debug("Network thread created")
     keyLoggerThread.daemon = True
 #    typesetterThread.daemon = True
     # Start new Network checker thread
     #networkCheckerThread.start()
     # start the key loggin thread
     keyLoggerThread.start()
+    logger.debug("KeyLogger thread started")
 #    typesetterThread.start()
     #thread2.start()
     try:
