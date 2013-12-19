@@ -1,0 +1,28 @@
+### BEGIN INIT INFO
+# Provides:          pi-writer-shutdown
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Put a short description of the service here
+# Description:       Put a long description of the service here
+### END INIT INFO
+
+case "$1" in
+  start)
+    echo "Starting typesetter"
+    # run application you want to start
+    typesetter &
+    ;;
+  stop)
+    echo "Running typesetter"
+    # kill application you want to stop
+    typesetter
+    ;;
+  *)
+    echo "Usage: /etc/init.d/example{start|stop}"
+    exit 1
+    ;;
+esac
+
+exit 0
