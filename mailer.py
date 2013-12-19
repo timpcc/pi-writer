@@ -22,7 +22,7 @@ class Mailer():
         configPath = os.path.join("/home/pi/.config", "pi-writer", "email.conf")
         self.config = ConfigParser.ConfigParser()
         self.config.read(configPath)
-        self.server = self.config.get("Email", "server")
+        self.servers = self.config.get("Email", "servers").split(";")
         self.user = self.config.get("Email", "user")
         self.password = self.config.get("Email", "password")
         self.sender = self.config.get("Email", "sender")
@@ -63,7 +63,15 @@ class Mailer():
                 print("attached")
             #'smtp.gmail.com:587'
             print("Creating smtp connection")
-            smtp = smtplib.SMTP(self.server, timeout=30)
+            for server in self.servers:
+                try:
+                    print("Using server " + str(server))
+                    smtp = smtplib.SMTP(server, timeout=30)
+                    break;
+                except Exception as se:
+                    print(str(se))
+                    continue
+                
             print("Created")
             smtp.starttls()
             print("enabled secure connection")
