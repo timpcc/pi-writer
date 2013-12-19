@@ -63,7 +63,7 @@ class Mailer():
                 print("attached")
             #'smtp.gmail.com:587'
             print("Creating smtp connection")
-            smtp = smtplib.SMTP(self.server)
+            smtp = smtplib.SMTP(self.server, timeout=30)
             print("Created")
             smtp.starttls()
             print("enabled secure connection")
