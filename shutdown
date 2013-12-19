@@ -15,9 +15,9 @@ case "$1" in
     typesetter &
     ;;
   stop)
-    echo "Stopping example"
+    echo "Running typesetter"
     # kill application you want to stop
-    killall typesetter
+    typesetter
     ;;
   *)
     echo "Usage: /etc/init.d/example{start|stop}"
