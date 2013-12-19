@@ -63,7 +63,9 @@ class TypesetterThread(threading.Thread):
             # move the file to the sent directory
             if not os.path.exists(self.sentDir):
                 os.makedirs(self.sentDir)
-            shutil.move(rtf_file_name, os.path.join(self.sentDir, filename + ".rtf"))
+            target = os.path.join(self.sentDir, filename + ".rtf")
+            shutil.move(rtf_file_name, target)
+            print("Moved file to send dir: " + target)
 
     def stop(self):
         print("Attempting to stop typesetter thread...")
