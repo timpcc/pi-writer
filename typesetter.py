@@ -22,8 +22,7 @@ from textmangler import TextMangler
 class Typesetter():
     
     def __init__(self):
-        self.log = logging.getLogger(__name__)
-        
+        self.log = logging.getLogger(__name__)        
         self.rtfFiles = []
         self.loadSettings()
         
@@ -42,24 +41,40 @@ class Typesetter():
         self.replaceList = json.loads(data)
         
     def getFiles(self):
-        self.files = []
-        for (dirpath, dirnames, filenames) in os.walk(self.keylogDir):
-            for f in filenames:
-                self.files.append(os.path.join(dirpath, f))
-            break;
-        return len(self.files) > 0
+        try:
+            self.files = []
+            for (dirpath, dirnames, filenames) in os.walk(self.keylogDir):
+                for f in filenames:
+                    self.files.append(os.path.join(dirpath, f))
+                break;
+            return len(self.files) > 0
+        except Exception as e:
+            print(str(e))
+            return False
         
     def run(self):
-        if self.getFiles():
-            if self.process() is not None:
-                archive = self.archive(self.files)
-                if archive is not None:
-                    print("Working files archived to " + archive)
-                    return True
-        return False
+        try:
+            log.info("Running typesetter")
+            if self.getFiles():
+                if self.process() is not None:
+                    archive = self.archive(self.files)
+                    if archive is not None:
+                        print("Working files archived to " + archive)
+                        return True
+                    else:
+                        print("Failed to archive keylog files")
+                else:
+                    print("Failed to typeset files")
+            else:
+                print("There are no files in '" + self.keylogDir + "' to typeset")
+                return False
+        except Exception as e:
+            print(str(e))
+            return False
 
     def process(self):
         try:
+            print("There are " + self.files + " to typeset")
             # load the files
             for f in self.files:
                 try:
