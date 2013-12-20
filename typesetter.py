@@ -74,7 +74,7 @@ class Typesetter():
 
     def process(self):
         try:
-            print("There are " + self.files + " to typeset")
+            print("There are " + str(len(self.files)) + " to typeset")
             # load the files
             for f in self.files:
                 try:
