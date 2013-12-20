@@ -13,6 +13,7 @@ import json
 import unicodedata
 import shutil
 import datetime
+import traceback
 import tarfile
 import logging
 from PyRTF import *
@@ -47,8 +48,8 @@ class Typesetter():
                     self.files.append(os.path.join(dirpath, f))
                 break;
             return len(self.files) > 0
-        except Exception as e:
-            print(str(e))
+        except:
+            traceback.print_exc(file=sys.stdout)
             return False
         
     def run(self):
@@ -67,8 +68,8 @@ class Typesetter():
             else:
                 print("There are no files in '" + self.keylogDir + "' to typeset")
                 return False
-        except Exception as e:
-            print(str(e))
+        except:
+            traceback.print_exc(file=sys.stdout)
             return False
 
     def process(self):
@@ -85,6 +86,8 @@ class Typesetter():
                         text = mangler.mangle(text)
                 
                     doc = self.createRTFDocument(text)
+                    if doc is None:
+                        return None;
                     renderer = Renderer()
                 
                     (directory, filename) = os.path.split(f)
@@ -96,12 +99,12 @@ class Typesetter():
                         
                     renderer.Write(doc, open(rtfName, 'w'))
                     self.rtfFiles.append(rtfName)
-                except Exception as rtfE:
-                    print(str(rtfE))
+                except:
+                    traceback.print_exc(file=sys.stdout)
                     continue
             return self.rtfFiles
-        except Exception as e:
-            print(str(e))
+        except:
+            traceback.print_exc(file=sys.stdout)
             return None
         
     def archive(self, files):
@@ -119,40 +122,44 @@ class Typesetter():
                 except OSError as ose:
                     print("Failed to delete " + f2 + " due to: " + str(ose))
             return target
-        except Exception as e:
-            print(str(e))
+        except:
+            traceback.print_exc(file=sys.stdout)
             return None
         
         
     def createRTFDocument(self, text):
-        doc = Document()
-        ss = doc.StyleSheet
-        section = Section()
-        doc.Sections.append(section)
-        paras = text.split('\n')
-               
-        first = True
-        for pt in paras:
-            if pt == "":
-                print("Skipping empty paragraph")
-                continue            
-            cls = pt.__class__
-
-            print("Paragraph type: " + str(cls))
-            if str(type(pt)) == "<type 'unicode'>":
-                print("Normalizing unicode")
-                text = unicodedata.normalize("NFKD", pt).encode('ascii', 'ignore')
-            else:
-                print("Text already ASCII")
-                text = pt
-            if first:
-                p = Paragraph(ss.ParagraphStyles.Normal)
-                first = False
-            else:
-                p = Paragraph()
-            p.append(TEXT( text, font=ss.Fonts.VTPortableRemington ))
-            section.append(p)
-        return doc
+        try:
+            doc = Document()
+            ss = doc.StyleSheet
+            section = Section()
+            doc.Sections.append(section)
+            paras = text.split('\n')
+                   
+            first = True
+            for pt in paras:
+                if pt == "":
+                    print("Skipping empty paragraph")
+                    continue            
+                cls = pt.__class__
+    
+                print("Paragraph type: " + str(cls))
+                if str(type(pt)) == "<type 'unicode'>":
+                    print("Normalizing unicode")
+                    text = unicodedata.normalize("NFKD", pt).encode('ascii', 'ignore')
+                else:
+                    print("Text already ASCII")
+                    text = pt
+                if first:
+                    p = Paragraph(ss.ParagraphStyles.Normal)
+                    first = False
+                else:
+                    p = Paragraph()
+                p.append(TEXT( text, font=ss.Fonts.VTPortableRemington ))
+                section.append(p)
+            return doc
+        except:
+            traceback.print_exc(file=sys.stdout)
+            return None;
 
 
 def archiveToDir(sentDir, files):
@@ -172,8 +179,8 @@ def archiveToDir(sentDir, files):
             except OSError as ose:
                 print("Failed to delete " + f2 + " due to: " + str(ose))
         return target
-    except Exception as e:
-        print(str(e))
+    except:
+        traceback.print_exc(file=sys.stdout)
         return None
 
 if __name__ == "__main__":
