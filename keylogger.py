@@ -3,7 +3,6 @@
 
 import threading
 import os
-import smtplib
 import time
 import datetime
 import shutil
@@ -20,12 +19,12 @@ class KeyLoggerThread(threading.Thread):
         configPath = os.path.join("/home/pi", "pi-writer", "pi-writer.conf")
         self.config = ConfigParser.ConfigParser()
         self.config.read(configPath)
-        self.workDir = self.config.get("KeyLogger", "workDir")
+        self.keylogDir = self.config.get("General", "keylogDir")
         #self.commandDir = self.config.get("Logger", "commandDir")
-        self.typesetDir = self.config.get("KeyLogger", "typesetDir")
-        self.commandKey = self.config.get("KeyLogger", "commandKey")
-        self.fileDateFormat = self.config.get("KeyLogger", "fileDateFormat")
-        #self.workDir = '/home/pi/pi-writer/current/'
+        self.typesetDir = self.config.get("General", "typesetDir")
+        self.commandKey = self.config.get("General", "commandKey")
+        self.fileDateFormat = self.config.get("General", "fileDateFormat")
+        #self.keylogDir = '/home/pi/pi-writer/current/'
         #self.typesetDir = '/home/pi/pi-writer/typeset/'
         self.hookManager = pyxhook.HookManager()
         self.hookManager.HookKeyboard()
@@ -42,7 +41,7 @@ class KeyLoggerThread(threading.Thread):
     def run(self):
         self.filename = self.createNewWorkingFile()
         
-        print("Writing to new file" + os.path.join(self.workDir, self.filename))
+        print("Writing to new file" + os.path.join(self.keylogDir, self.filename))
         self.hookManager.start()
         while not self._stop.isSet():
             time.sleep(0.1)
@@ -61,7 +60,7 @@ class KeyLoggerThread(threading.Thread):
         self.pageIndex += 1
         # create a new working file
         #self.filename = self.createNewWorkingFile()
-        #print("Writing to new file" + os.path.join(self.workDir, self.filename))
+        #print("Writing to new file" + os.path.join(self.keylogDir, self.filename))
 
 #    def onKeyUpEvent(self, event):
 #        pass
@@ -91,7 +90,7 @@ class KeyLoggerThread(threading.Thread):
             self.writeKey(event.Key)
             
     def writeKey(self, key):
-        with open(os.path.join(self.workDir, self.filename), 'a') as content_file:
+        with open(os.path.join(self.keylogDir, self.filename), 'a') as content_file:
             content_file.write(key + '\n')
             
     def writeKeyToCommand(self, Key):
@@ -110,13 +109,13 @@ class KeyLoggerThread(threading.Thread):
         print("Saving...")
         if not os.path.exists(self.typesetDir):
             os.makedirs(self.typesetDir)
-        print("Working file " + os.path.join(self.workDir, self.filename) + " exists " + str(os.path.exists(os.path.join(self.workDir, self.filename))))
+        print("Working file " + os.path.join(self.keylogDir, self.filename) + " exists " + str(os.path.exists(os.path.join(self.keylogDir, self.filename))))
         if os.path.exists(os.path.join(self.typesetDir, self.filename)):
             os.remove(os.path.join(self.typesetDir, self.filename))
-            print("Removed file " + os.path.join(self.typesetDir, self.filename) + ". Source exists " + str(os.path.exists(os.path.join(self.workDir, self.filename))))
-        print("Working file " + os.path.join(self.workDir, self.filename) + " exists " + str(os.path.exists(os.path.join(self.workDir, self.filename))))
+            print("Removed file " + os.path.join(self.typesetDir, self.filename) + ". Source exists " + str(os.path.exists(os.path.join(self.keylogDir, self.filename))))
+        print("Working file " + os.path.join(self.keylogDir, self.filename) + " exists " + str(os.path.exists(os.path.join(self.keylogDir, self.filename))))
         # move the current working file to the output folder
-        shutil.move(os.path.join(self.workDir, self.filename), os.path.join(self.typesetDir, self.filename))
+        shutil.move(os.path.join(self.keylogDir, self.filename), os.path.join(self.typesetDir, self.filename))
         print("Moved file to" + os.path.join(self.typesetDir, self.filename))
         print("File saved")
 
@@ -124,9 +123,9 @@ class KeyLoggerThread(threading.Thread):
         count = 2
         d = self.startDateTime
         filename = d + ".tw"
-        if not os.path.exists(self.workDir):
-            os.makedirs(self.workDir)
-        while os.path.exists(os.path.join(self.workDir, filename)):
+        if not os.path.exists(self.keylogDir):
+            os.makedirs(self.keylogDir)
+        while os.path.exists(os.path.join(self.keylogDir, filename)):
             filename = d + "_(" + str(count) + ").tw"
             count += 1
             

@@ -15,12 +15,12 @@ class CommandRunner():
         self.config = ConfigParser.ConfigParser()
         self.config.read(configPath)
         #self.workDir = self.config.get("Commands", "workDir")
-        data = self.config.get("CommandParser", "patterns")
-        self.replaceList = json.loads(data)
+        #data = self.config.get("CommandParser", "patterns")
+        #self.replaceList = json.loads(data)
 
     def run(self, data):
         try:
-            text = self.parseCommandString(data)
+            text = data
             print("Parsed command: " + text)
             # get id - get first line
             m_id = re.match(r"(?P<id>[A-Za-z0-9\._]+)", text)
@@ -57,8 +57,8 @@ class CommandRunner():
             #raise e
             return False
            
-    def parseCommandString(self, text):
-        for item in self.replaceList:
-            text = re.sub(item["match"], item["replace"], text)
-        return text
+#    def parseCommandString(self, text):
+#        for item in self.replaceList:
+#            text = re.sub(item["match"], item["replace"], text)
+#        return text
             
