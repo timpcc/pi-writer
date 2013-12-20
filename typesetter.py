@@ -183,7 +183,7 @@ if __name__ == "__main__":
             files.append(os.path.join(dirpath, f))
             break;
     
-    print("There are " + len(files) + " published files to email")
+    print("There are " + str(len(files)) + " published files to email")
     if len(files) > 0:
         mailer = Mailer()
         
