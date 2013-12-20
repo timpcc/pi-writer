@@ -118,7 +118,8 @@ class Typesetter():
             target = os.path.join(self.archiveDir, fname + ".tar.gz")
             tar = tarfile.open(target, "w:gz")
             for f in files:
-                tar.add(f)
+                fn = os.path.basename(f)
+                tar.add(f, fn)
             tar.close()
             for f2 in files:
                 try:
