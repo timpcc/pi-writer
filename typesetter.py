@@ -100,6 +100,7 @@ class Typesetter():
                     rtfName = os.path.join(self.publishDir, filename + '.rtf')
                         
                     renderer.Write(doc, open(rtfName, 'w'))
+                    print("typeset to RTF document: " + rtfName)
                     self.rtfFiles.append(rtfName)
                 except:
                     traceback.print_exc(file=sys.stdout)
