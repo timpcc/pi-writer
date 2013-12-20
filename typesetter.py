@@ -204,7 +204,7 @@ if __name__ == "__main__":
     for (dirpath, dirnames, filenames) in os.walk(publishDir):
         for f in filenames:
             files.append(os.path.join(dirpath, f))
-            break;
+        break;
     
     print("There are " + str(len(files)) + " published files to email")
     if len(files) > 0:
