@@ -37,7 +37,6 @@ class Typesetter():
         self.publishDir = self.config.get("General", "publishDir")
         
         self.archiveDir = self.config.get("General", "archiveDir")
-        print(data)
         self.replaceList = json.loads(data)
         
     def getFiles(self):
