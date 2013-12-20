@@ -78,6 +78,7 @@ class Typesetter():
             # load the files
             for f in self.files:
                 try:
+                    print("Typesetting: " + f)
                     data = ""
                     with open(f, 'r') as content_file:
                         data = content_file.read()
@@ -87,6 +88,7 @@ class Typesetter():
                 
                     doc = self.createRTFDocument(text)
                     if doc is None:
+                        print("Failed to create rtf document")
                         return None;
                     renderer = Renderer()
                 
@@ -163,10 +165,10 @@ class Typesetter():
 def archiveToDir(sentDir, files):
     try:
         # copy the files to a temp directory
-        fname = datetime.datetime.now().strftime(self.fileDateFormat)
+        fname = datetime.datetime.now().strftime("%Y%m%d_%H.%M.%S")
         if not os.path.exists(sentDir):
                 os.makedirs(sentDir)
-        target = os.path.join(self.sentDir, fname + ".tar.gz")
+        target = os.path.join(sentDir, fname + ".tar.gz")
         tar = tarfile.open(target, "w:gz")
         for f in files:
             tar.add(f)
