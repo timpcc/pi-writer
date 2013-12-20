@@ -110,6 +110,8 @@ class Typesetter():
     def archive(self, files):
         try:
             # copy the files to a temp directory
+            if not os.path.exists(self.archiveDir):
+                os.makedirs(self.archiveDir)
             fname = datetime.datetime.now().strftime(self.fileDateFormat)
             target = os.path.join(self.archiveDir, fname + ".tar.gz")
             tar = tarfile.open(target, "w:gz")
@@ -138,16 +140,12 @@ class Typesetter():
             first = True
             for pt in paras:
                 if pt == "":
-                    print("Skipping empty paragraph")
                     continue            
                 cls = pt.__class__
-    
-                print("Paragraph type: " + str(cls))
+
                 if str(type(pt)) == "<type 'unicode'>":
-                    print("Normalizing unicode")
                     text = unicodedata.normalize("NFKD", pt).encode('ascii', 'ignore')
                 else:
-                    print("Text already ASCII")
                     text = pt
                 if first:
                     p = Paragraph(ss.ParagraphStyles.Normal)
