@@ -18,7 +18,7 @@ class KeyLoggerThread(threading.Thread):
     
     def __init__(self):
         super(KeyLoggerThread, self).__init__()
-        self.logging.basicConfig(filename="pi-writer.log", level=logging.DEBUG)
+        logging.basicConfig(filename="pi-writer.log", level=logging.DEBUG)
         self.logger = logging.getLogger(__name__)
         configPath = os.path.join("/home/pi", "pi-writer", "pi-writer.conf")
         self.config = ConfigParser.ConfigParser()
