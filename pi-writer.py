@@ -11,7 +11,7 @@ import logging
 
 exitFlag = 0
 
-logging.basicConfig(filename="pi-writer.log", level=logging.DEBUG)
+logging.basicConfig(filename="pi-writer.log", level=logging.DEBUG, format="%(asctime)s;%(levelname)s;%(message)s")
 logger = logging.getLogger(__name__)
       
 if __name__ == "__main__":
