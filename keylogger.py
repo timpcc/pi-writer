@@ -97,7 +97,7 @@ class KeyLoggerThread(threading.Thread):
             self.logger.debug("Starting shutdown timer")
             print("Starting shutdown timer...")
             self.shutdownTimer = threading.Timer(3.0, self.shutdown)
-            
+            self.shutdownTimer.start()
 #        if self._control_l_down and (event.Key == "p" or event.Key == "P"):
 #            print("MAKE NEW PAGE")
 #            self.newPage()
