@@ -9,6 +9,8 @@ import shutil
 import pyxhook
 import json
 import ConfigParser
+import logging
+import subprocess
 from command import CommandRunner
 from textmangler import TextMangler
 
@@ -16,6 +18,8 @@ class KeyLoggerThread(threading.Thread):
     
     def __init__(self):
         super(KeyLoggerThread, self).__init__()
+        self.logging.basicConfig(filename="pi-writer.log", level=logging.DEBUG)
+        self.logger = logging.getLogger(__name__)
         configPath = os.path.join("/home/pi", "pi-writer", "pi-writer.conf")
         self.config = ConfigParser.ConfigParser()
         self.config.read(configPath)
@@ -23,13 +27,15 @@ class KeyLoggerThread(threading.Thread):
         #self.commandDir = self.config.get("Logger", "commandDir")
         self.typesetDir = self.config.get("General", "typesetDir")
         self.commandKey = self.config.get("General", "commandKey")
+        self.shutdownKey = self.config.get("General", "shutdownKey")
+        self.shutdownKeyHoldTime = self.config.get("General", "shutdownKeyHoldTime")
         self.fileDateFormat = self.config.get("General", "fileDateFormat")
         #self.keylogDir = '/home/pi/pi-writer/current/'
         #self.typesetDir = '/home/pi/pi-writer/typeset/'
         self.hookManager = pyxhook.HookManager()
         self.hookManager.HookKeyboard()
         self.hookManager.KeyDown = self.onKeyDownEvent
-#        self.hookManager.KeyUp = self.onKeyUpEvent
+        self.hookManager.KeyUp = self.onKeyUpEvent
         self._stop = threading.Event()
         self.pageIndex = 1
         self.startDateTime = datetime.datetime.now().strftime(self.fileDateFormat)
@@ -40,16 +46,15 @@ class KeyLoggerThread(threading.Thread):
 
     def run(self):
         self.filename = self.createNewWorkingFile()
-        
-        print("Writing to new file" + os.path.join(self.keylogDir, self.filename))
+        self.logger.debug("Writing to new file" + os.path.join(self.keylogDir, self.filename))
         self.hookManager.start()
         while not self._stop.isSet():
             time.sleep(0.1)
-        print("Logger thread stopped")
+        self.logger.debug("Logger thread stopped")
         self.hookManager.cancel()
 
     def stop(self):
-        print("Attempting to stop logger thread...")
+        self.logger.debug("Attempting to stop logger thread...")
         self._stop.set()
         
     def newPage(self):
@@ -62,8 +67,11 @@ class KeyLoggerThread(threading.Thread):
         #self.filename = self.createNewWorkingFile()
         #print("Writing to new file" + os.path.join(self.keylogDir, self.filename))
 
-#    def onKeyUpEvent(self, event):
-#        pass
+    def onKeyUpEvent(self, event):
+        if event.Key == self.shutdownKey:
+            if self.shutdownTimer is not None:
+                self.logger.debug("Cancelling shutdown timer")
+                self.shutdownTimer.cancel()
 
     def onKeyDownEvent(self, event):
         #print(event.Key)
@@ -77,6 +85,12 @@ class KeyLoggerThread(threading.Thread):
                 self.commandMode = True
                 self.commandString = ""
             return
+    
+        if event.Key == self.shutdownKey:
+            # start timer
+            self.logger.debug("Starting shutdown timer")
+            print("Starting shutdown timer...")
+            self.shutdownTimer = threading.Timer(self.shutdownKeyHoldTime, self.shutdown)
             
 #        if self._control_l_down and (event.Key == "p" or event.Key == "P"):
 #            print("MAKE NEW PAGE")
@@ -104,6 +118,18 @@ class KeyLoggerThread(threading.Thread):
         print("Running command: " + mangledCommand)
         runner.run(mangledCommand)
         print("Command run")
+        
+    def shutdown(self):
+        try:
+            # shutdown raspberry pi
+            self.logger.debug("Shutting down system")
+            print("Shutting down system")
+            command = "/usr/bin/sudo /sbin/shutdown now"
+            process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
+            output = process.communicate()[0]
+            self.logger.info(str(output))
+        except:
+            self.logger.exception("Exception in shutdown timer thread")
             
     def save(self):
         print("Saving...")
