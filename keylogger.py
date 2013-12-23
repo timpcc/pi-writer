@@ -70,14 +70,13 @@ class KeyLoggerThread(threading.Thread):
 
     def onKeyUpEvent(self, event):
         if event.Key == self.shutdownKey:
-            if not self.shutdownTimer.finished:
+            try:
                 self.logger.debug("Cancelling shutdown timer")
                 print("Cancelling shutdown timer")
                 self.shutdownTimer.cancel()
                 self.shutdownTimer.join()
-            else:
-                self.logger.debug("Cannot cancel Shutdown timer. It has finished.")
-                print("Cannot cancel Shutdown timer. It has finished.")
+            except:
+                self.logger.exception("Exception whilst cancelling shutdown timer")
 
     def onKeyDownEvent(self, event):
         #print(event.Key)
@@ -96,7 +95,7 @@ class KeyLoggerThread(threading.Thread):
             # start timer
             self.logger.debug("Starting shutdown timer")
             print("Starting shutdown timer...")
-            self.shutdownTimer = threading.Timer(3.0, self.shutdown)
+            self.shutdownTimer = threading.Timer(float(self.shutdownKeyHoldTime), self.shutdown)
             self.shutdownTimer.start()
 #        if self._control_l_down and (event.Key == "p" or event.Key == "P"):
 #            print("MAKE NEW PAGE")
