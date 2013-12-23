@@ -74,6 +74,7 @@ class KeyLoggerThread(threading.Thread):
                 self.logger.debug("Cancelling shutdown timer")
                 print("Cancelling shutdown timer")
                 self.shutdownTimer.cancel()
+                self.shutdownTimer.join()
             else:
                 self.logger.debug("Cannot cancel Shutdown timer. It has finished.")
                 print("Cannot cancel Shutdown timer. It has finished.")
@@ -95,7 +96,7 @@ class KeyLoggerThread(threading.Thread):
             # start timer
             self.logger.debug("Starting shutdown timer")
             print("Starting shutdown timer...")
-            self.shutdownTimer = threading.Timer(self.shutdownKeyHoldTime, self.shutdown)
+            self.shutdownTimer = threading.Timer(self.shutdownKeyHoldTime, 3)
             
 #        if self._control_l_down and (event.Key == "p" or event.Key == "P"):
 #            print("MAKE NEW PAGE")
@@ -125,6 +126,7 @@ class KeyLoggerThread(threading.Thread):
         print("Command run")
         
     def shutdown(self):
+        print("Calling shutdown")
         try:
             # shutdown raspberry pi
             self.logger.debug("Shutting down system")
