@@ -8,6 +8,7 @@ import ConfigParser
 import os
 import json
 import logging
+import sys
 import traceback;
 
 class CommandRunner():
@@ -22,7 +23,7 @@ class CommandRunner():
         except:
             if self.logger is not None:
                 self.logger.exception("Exception whilst setting up command runner")
-            else
+            else:
                 print("Exception whilst setting up command runner")
                 traceback.print_exc(file=sys.stdout)
 
