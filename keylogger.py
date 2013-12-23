@@ -9,6 +9,7 @@ import shutil
 import pyxhook
 import json
 import ConfigParser
+import traceback
 import logging
 import subprocess
 from command import CommandRunner
@@ -69,9 +70,13 @@ class KeyLoggerThread(threading.Thread):
 
     def onKeyUpEvent(self, event):
         if event.Key == self.shutdownKey:
-            if self.shutdownTimer is not None:
+            if not self.shutdownTimer.finished:
                 self.logger.debug("Cancelling shutdown timer")
+                print("Cancelling shutdown timer")
                 self.shutdownTimer.cancel()
+            else:
+                self.logger.debug("Cannot cancel Shutdown timer. It has finished.")
+                print("Cannot cancel Shutdown timer. It has finished.")
 
     def onKeyDownEvent(self, event):
         #print(event.Key)
@@ -130,7 +135,8 @@ class KeyLoggerThread(threading.Thread):
             self.logger.info(str(output))
         except:
             self.logger.exception("Exception in shutdown timer thread")
-            
+            print("Exception in shutdown timer")
+            traceback.print_exc()
 #    def save(self):
 #        print("Saving...")
 #        if not os.path.exists(self.typesetDir):
