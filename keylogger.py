@@ -25,7 +25,7 @@ class KeyLoggerThread(threading.Thread):
         self.config.read(configPath)
         self.keylogDir = self.config.get("General", "keylogDir")
         #self.commandDir = self.config.get("Logger", "commandDir")
-        self.typesetDir = self.config.get("General", "typesetDir")
+       # self.typesetDir = self.config.get("General", "typesetDir")
         self.commandKey = self.config.get("General", "commandKey")
         self.shutdownKey = self.config.get("General", "shutdownKey")
         self.shutdownKeyHoldTime = self.config.get("General", "shutdownKeyHoldTime")
@@ -131,19 +131,19 @@ class KeyLoggerThread(threading.Thread):
         except:
             self.logger.exception("Exception in shutdown timer thread")
             
-    def save(self):
-        print("Saving...")
-        if not os.path.exists(self.typesetDir):
-            os.makedirs(self.typesetDir)
-        print("Working file " + os.path.join(self.keylogDir, self.filename) + " exists " + str(os.path.exists(os.path.join(self.keylogDir, self.filename))))
-        if os.path.exists(os.path.join(self.typesetDir, self.filename)):
-            os.remove(os.path.join(self.typesetDir, self.filename))
-            print("Removed file " + os.path.join(self.typesetDir, self.filename) + ". Source exists " + str(os.path.exists(os.path.join(self.keylogDir, self.filename))))
-        print("Working file " + os.path.join(self.keylogDir, self.filename) + " exists " + str(os.path.exists(os.path.join(self.keylogDir, self.filename))))
-        # move the current working file to the output folder
-        shutil.move(os.path.join(self.keylogDir, self.filename), os.path.join(self.typesetDir, self.filename))
-        print("Moved file to" + os.path.join(self.typesetDir, self.filename))
-        print("File saved")
+#    def save(self):
+#        print("Saving...")
+#        if not os.path.exists(self.typesetDir):
+#            os.makedirs(self.typesetDir)
+#        print("Working file " + os.path.join(self.keylogDir, self.filename) + " exists " + str(os.path.exists(os.path.join(self.keylogDir, self.filename))))
+#        if os.path.exists(os.path.join(self.typesetDir, self.filename)):
+#            os.remove(os.path.join(self.typesetDir, self.filename))
+#            print("Removed file " + os.path.join(self.typesetDir, self.filename) + ". Source exists " + str(os.path.exists(os.path.join(self.keylogDir, self.filename))))
+#        print("Working file " + os.path.join(self.keylogDir, self.filename) + " exists " + str(os.path.exists(os.path.join(self.keylogDir, self.filename))))
+#        # move the current working file to the output folder
+#        shutil.move(os.path.join(self.keylogDir, self.filename), os.path.join(self.typesetDir, self.filename))
+#        print("Moved file to" + os.path.join(self.typesetDir, self.filename))
+#        print("File saved")
 
     def createNewWorkingFile(self):
         count = 2
