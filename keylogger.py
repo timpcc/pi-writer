@@ -26,7 +26,7 @@ class KeyLoggerThread(threading.Thread):
         self.config.read(configPath)
         self.keylogDir = self.config.get("General", "keylogDir")
         #self.commandDir = self.config.get("Logger", "commandDir")
-       # self.typesetDir = self.config.get("General", "typesetDir")
+        # self.typesetDir = self.config.get("General", "typesetDir")
         self.commandKey = self.config.get("General", "commandKey")
         self.shutdownKey = self.config.get("General", "shutdownKey")
         self.shutdownKeyHoldTime = self.config.get("General", "shutdownKeyHoldTime")

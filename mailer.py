@@ -23,10 +23,6 @@ class Mailer():
         configPath = os.path.join("/home/pi/.config", "pi-writer", "email.conf")
         self.config = ConfigParser.ConfigParser()
         self.config.read(configPath)
-        #self.servers = self.config.get("Email", "servers").split(";")
-        #self.user = self.config.get("Email", "user")
-        #self.password = self.config.get("Email", "password")
-        #self.sender = self.config.get("Email", "sender")
         acc = self.config.get("Email", "accounts");
         self.accounts = json.loads(acc)
         self.currentAccountIndex = 0
@@ -79,52 +75,6 @@ class Mailer():
                     print(str(ex))
                     continue
             return False
-            #send_from = self.sender
-            #send_to = self.recipients
-            #username = self.user
-            #password = self.password
-            
-            #msg = MIMEMultipart()
-            #msg['From'] = send_from
-            #msg['To'] = COMMASPACE.join(send_to)
-            #msg['Date'] = formatdate(localtime=True)
-            #msg['Subject'] = subject
-            
-            #msg.attach( MIMEText(message) )
-            
-            #for f in files:
-            #    print("Adding file " + str(f))
-            #    part = MIMEBase('application', "octet-stream")
-            #    print("Created part")
-            #    part.set_payload( open(f,"rb").read() )
-            #    print("Set payload")
-            #    Encoders.encode_base64(part)
-            #    print("encoded as base64")
-            #    part.add_header('Content-Disposition', 'attachment; filename="%s"' % os.path.basename(f))
-            #    print("added header")
-            #    msg.attach(part) 
-            #    print("attached")
-            #'smtp.gmail.com:587'
-            #print("Creating smtp connection")
-            #for server in self.servers:
-            #    try:
-            #        print("Using server " + str(server))
-            #        smtp = smtplib.SMTP(server, timeout=30)
-            #        break;
-            #    except Exception as se:
-            #        print(str(se))
-            #        continue
-                
-            #print("Created")
-            #smtp.starttls()
-            #print("enabled secure connection")
-            #smtp.login(username,password)
-            #print("Sending email...")
-            #smtp.sendmail(send_from, send_to, msg.as_string())
-            #print("Sent")
-            #smtp.close()
-            #print("Done.")
-            #return True
         except Exception as e:
             print(str(e))
             return False
