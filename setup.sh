@@ -20,7 +20,7 @@ echo Making symbolic link for typesetter
 sudo ln -s /home/pi/pi-writer/typesetter.py /usr/bin/typesetter
 
 echo Making symbolic link for 'shutdown' in init.d
-sudo ln -s /home/pi/pi-writer/shutdownh /etc/init.d/pi-writer-shutdown
+sudo ln -s /home/pi/pi-writer/shutdown /etc/init.d/pi-writer-shutdown
 
 echo Setting up rc.d scripts
 sudo update-rc.d pi-writer-shutdown start 20 0 6 .

@@ -1,5 +1,5 @@
 #! /bin/sh
 echo "Running pi-writer"
-sudo -u pi python single.py pi-writer
+sudo -u pi python single.py pi-writer &
 
 exit 0
