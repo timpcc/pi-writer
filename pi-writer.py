@@ -53,6 +53,7 @@ if __name__ == "__main__":
         else:
             print "Unknown command"
             sys.exit(2)
+        logger.debug("Exiting daemon normally")
         sys.exit(0)
     else:
         print "usage: %s start|stop|restart" % sys.argv[0]

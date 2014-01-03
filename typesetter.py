@@ -186,6 +186,7 @@ def archiveToDir(sentDir, files):
         return None
 
 if __name__ == "__main__":
+    logging.basicConfig(filename="/var/log/pi-writer/typesetter.log", level=logging.DEBUG, format="%(asctime)s;%(levelname)s;%(message)s")
     log = logging.getLogger(__name__)
     configPath = os.path.join("/home/pi/pi-writer", "pi-writer.conf")
     config = ConfigParser.ConfigParser()
