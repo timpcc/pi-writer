@@ -40,7 +40,7 @@ class PiWriterDaemon(daemon.Daemon):
 
       
 if __name__ == "__main__":
-    daemon = PiWriterDaemon('/tmp/pi-writer-daemon-example.pid')
+    daemon = PiWriterDaemon('/tmp/pi-writer-daemon-example.pid', stdout=sys.stdout, stderr=sys.stderr)
     if len(sys.argv) == 2:
         if 'start' == sys.argv[1]:
             daemon.start()
