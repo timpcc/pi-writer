@@ -121,6 +121,26 @@ class Daemon:
         """
         self.stop()
         self.start()
+        
+    def status(self):
+        try:
+            pf = file(self.pidfile, 'r')
+            pid = int(pf.read().strip())
+            pf.close()
+        except IOError:
+            pid = None
+
+        try:
+            procfile = file("/proc/%d/status" % pid, 'r')
+            procfile.close()
+        except IOError:
+            sys.stdout.write("there is no process with the PID specified in %s\n" % self.pidfile)
+            sys.exit(0)
+        except TypeError:
+            sys.stdout.write("pidfile %s does not exist\n" % self.pidfile)
+            sys.exit(0)
+
+        sys.stdout.write("the process with the PID %d is running\n" % pid)
 
     def run(self):
         """
