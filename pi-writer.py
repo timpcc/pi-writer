@@ -10,7 +10,7 @@ import traceback
 import logging
 import daemon
 
-class PiWriter(daemon.Daemon):
+class PiWriterDaemon(daemon.Daemon):
     
     def run(self):
         logging.basicConfig(filename="pi-writer.log", level=logging.DEBUG, format="%(asctime)s;%(levelname)s;%(message)s")
@@ -40,7 +40,7 @@ class PiWriter(daemon.Daemon):
 
       
 if __name__ == "__main__":
-    daemon = MyDaemon('/tmp/pi-writer-daemon-example.pid')
+    daemon = PiWriterDaemon('/tmp/pi-writer-daemon-example.pid')
     if len(sys.argv) == 2:
         if 'start' == sys.argv[1]:
             daemon.start()
