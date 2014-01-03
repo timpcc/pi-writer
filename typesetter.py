@@ -55,7 +55,7 @@ class Typesetter():
         
     def run(self):
         try:
-            log.info("Running typesetter")
+            self.logger.info("Running typesetter")
             if self.getFiles():
                 if self.process() is not None:
                     archive = self.archive(self.files)
@@ -185,11 +185,11 @@ def archiveToDir(sentDir, files):
             try:
                 os.remove(f2)
             except OSError as ose:
-                self.logger.exception("Failed to delete " + f2 + " due to: " + str(ose))
+                log.exception("Failed to delete " + f2 + " due to: " + str(ose))
         return target
     except:
         #traceback.print_exc(file=sys.stdout)
-        self.logger.exception("Exception whilst archiving files to directory")
+        log.exception("Exception whilst archiving files to directory")
         return None
 
 if __name__ == "__main__":
@@ -205,7 +205,7 @@ if __name__ == "__main__":
 
     if typesetter.run():        
         # Email files
-        self.logger.info("Typesetter run successfully")
+        log.info("Typesetter run successfully")
         
     # get all the files in the publish folder and email them
     files = []
@@ -214,7 +214,7 @@ if __name__ == "__main__":
             files.append(os.path.join(dirpath, f))
         break;
     
-    self.logger.info("There are " + str(len(files)) + " published files to email")
+    log.info("There are " + str(len(files)) + " published files to email")
     if len(files) > 0:
         mailer = Mailer()
         
