@@ -13,7 +13,7 @@ import daemon
 class PiWriterDaemon(daemon.Daemon):
     
     def run(self):
-        logging.basicConfig(filename="pi-writer.log", level=logging.DEBUG, format="%(asctime)s;%(levelname)s;%(message)s")
+        logging.basicConfig(filename="/var/log/pi-writer.log", level=logging.DEBUG, format="%(asctime)s;%(levelname)s;%(message)s")
         logger = logging.getLogger(__name__)
         # Create new threads
         logger.debug("Creating threads...")
